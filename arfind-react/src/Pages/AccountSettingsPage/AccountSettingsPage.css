@@ -1,0 +1,64 @@
+.account-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .input-field label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .input-wrapper input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+  }
+  
+  .input-wrapper input:disabled {
+    background-color: #e0e0e0;
+    color: #777;
+  }
+  
+  .edit-button {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .edit-button img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .save-button {
+    background-color: #0486FF;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .save-button:hover {
+    background-color: #0366cc;
+  }
+  h1{
+    margin: 2rem;
+  }

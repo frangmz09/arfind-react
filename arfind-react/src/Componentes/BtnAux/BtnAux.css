@@ -1,0 +1,49 @@
+.btn-aux {
+  display: inline-flex; /* Centra el contenido del botón */
+  align-items: center; /* Centra verticalmente el contenido del botón */
+  justify-content: center; /* Centra horizontalmente el contenido del botón */
+  width: 3rem; 
+  height: 3rem; 
+  padding: 0.2rem;
+  border: 2px solid #ccc; 
+  border-radius: 8px; 
+  overflow: hidden;
+  background-color: #fff; 
+  transition: border-color 0.3s, background-color 0.3s; 
+   z-index: 10; /* Asegura que el botón esté por encima de otros elementos */
+}
+
+.btn-aux:hover {
+  border-color: #0486FF; 
+  background-color: #F9F9F9; 
+}
+
+.btn-aux-img {
+  width: 100%; 
+  height: 100%;
+  object-fit: cover; 
+}
+
+/* Media queries para hacer el botón responsive */
+@media (max-width: 600px) {
+  .btn-aux {
+    width: 2.5rem; 
+    height: 2.5rem; 
+  }
+}
+
+@media (max-width: 400px) {
+  .btn-aux {
+    width: 2rem; 
+    height: 2rem; 
+  }
+}
+
+.btn-aux.login-btn-op {
+  width: 2rem; 
+  height: 2rem; 
+  margin: 5px;
+  padding: 10px; 
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}

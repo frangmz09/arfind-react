@@ -1,0 +1,52 @@
+.pasarela-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 80%;
+    max-width: 1000px; 
+    margin: 0 auto; 
+}
+
+.pasarela-products {
+    width: 100%;
+    overflow: hidden;
+}
+
+.products-wrapper {
+    display: flex;
+    transition: transform 0.5s ease;
+    padding: 15px; 
+}
+
+.arrow-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.arrow-btn img {
+    width: 30px; 
+    height: auto;
+}
+
+.arrow-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.left {
+    left: 0px;
+}
+
+.right {
+    right: 0px;
+}
+
+.product-card {
+    margin: 0 10px; /* Añade espacio entre las tarjetas */
+}

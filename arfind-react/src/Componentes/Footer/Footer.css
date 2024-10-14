@@ -1,0 +1,17 @@
+/* Estilo del footer */
+.footer {
+  background-color: #D9D9D9; 
+  padding: 10px 20px;
+  width: 100%; 
+  box-sizing: border-box; 
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; 
+  color: #424242; 
+  font-size: 0.8rem;
+  position: fixed; 
+  bottom: 0; 
+  left: 0; 
+  z-index: 98; 
+}
+

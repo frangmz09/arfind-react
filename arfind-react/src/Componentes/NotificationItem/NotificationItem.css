@@ -1,0 +1,24 @@
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .notification-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  .notification-content h4 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  
+  .notification-content p {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
