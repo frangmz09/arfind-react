@@ -31,7 +31,10 @@ const Login = ({ onLogin }) => {
     if (Object.keys(formErrors).length === 0) {
       try {
         const auth = getAuth();
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);        
+        const token = await userCredential.user.getIdToken();
+        localStorage.setItem('userToken', token);  
+ 
         onLogin(); // Notifica al componente padre que el usuario se ha logueado
       } catch (error) {
         console.error("Error de autenticación: ", error);

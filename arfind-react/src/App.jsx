@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Register from './Componentes/Register/Register';
 import Login from './Componentes/Login/Login';
 import Home from './Pages/Home/Home';
+import LandingPage from './Pages/LandingPage/LandingPage';
 import AccountSettingsPage from './Pages/AccountSettingsPage/AccountSettingsPage';
 import PanelMapa from './Pages/PanelMapa/PanelMapa';
 import NavBar from './Componentes/NavBar/NavBar';
@@ -58,6 +59,7 @@ function App() {
       <div className="main-content">
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
+          {/* <Route path="/" element={isLoggedIn ? <LandingPage /> : <Navigate to="/login" />} /> */}
           <Route path="/producto" element={     <DetalleProducto producto={productoEjemplo} />} />
           <Route path="/mapa" element={true ? <PanelMapa /> : <Navigate to="/login" />} />
           <Route path="/mapa" element={true ? <PanelMapa /> : <Navigate to="/login" />} />

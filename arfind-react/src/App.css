@@ -9,14 +9,22 @@
 }
 
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0;
   text-align: center;
 }
+/*
 .main-content {
   padding-top: 5rem;
   margin-bottom: 2rem;
+}*/
+/* Suavizado de fuentes en Chrome, Safari, Opera */
+* {
+  -webkit-font-smoothing: antialiased;  /* Para Webkit (Chrome, Safari, Opera) */
+  -moz-osx-font-smoothing: grayscale;  /* Para Firefox en macOS */
+  text-rendering: optimizeLegibility;  /* Mejorar legibilidad en Firefox */
 }
+
 
 
