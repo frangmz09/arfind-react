@@ -48,6 +48,8 @@ function App() {
     const auth = getAuth();
     auth.signOut().then(() => {
       setIsLoggedIn(false);
+      localStorage.removeItem('userToken'); // Elimina userToken del localStorage
+      console.log('Sesión cerrada y userToken eliminado');
     }).catch(error => {
       console.error("Error al cerrar sesión: ", error);
     });
@@ -58,14 +60,13 @@ function App() {
       <NavBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <div className="main-content">
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
-          {/* <Route path="/" element={isLoggedIn ? <LandingPage /> : <Navigate to="/login" />} /> */}
+          <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/landing" />} />
+          <Route path="/landing" element={<LandingPage />} />
           <Route path="/producto" element={     <DetalleProducto producto={productoEjemplo} />} />
-          <Route path="/mapa" element={true ? <PanelMapa /> : <Navigate to="/login" />} />
           <Route path="/mapa" element={true ? <PanelMapa /> : <Navigate to="/login" />} />
           <Route path="/register" element={!isLoggedIn ? <Register /> : <Navigate to="/" />} />
           <Route path="/login" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />} />
-          <Route path="/account-settings" element={true ? <AccountSettingsPage/> : <Navigate to="/" />} />
+          <Route path="/account-settings" element={true ? <AccountSettingsPage/> : <Navigate to="/login" />} />
 
         </Routes>
       </div>

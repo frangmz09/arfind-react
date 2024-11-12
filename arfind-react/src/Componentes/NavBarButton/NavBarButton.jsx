@@ -50,6 +50,7 @@ const NavBarButton = ({ imgSrc, altText, isProfileButton, onClick, onLogout }) =
   );
 };
 
+
 NavBarButton.propTypes = {
   imgSrc: PropTypes.string.isRequired,
   altText: PropTypes.string.isRequired,
