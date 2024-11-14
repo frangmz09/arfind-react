@@ -9,6 +9,7 @@ import PanelMapa from './Pages/PanelMapa/PanelMapa';
 import NavBar from './Componentes/NavBar/NavBar';
 import PasarelaProductos from './Componentes/PasarelaProductos/PasarelaProductos';
 import Footer from './Componentes/Footer/Footer';
+import axios from 'axios';
 
 
 

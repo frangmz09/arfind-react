@@ -96,7 +96,7 @@ const Landing = () => {
           <div style={styles.productText}>
           <div style={styles.containerProductIconRight}>
             <div style={styles.textContainerProductIcon}>
-              <p style={styles.titleProductIcon}>Cuidá a tus mascotas,</p>
+              <p style={styles.titleProductIcon}>Cuidá a tus mascotas</p>
               <p style={styles.subtitleProductIcon}>estés donde estés</p>
             </div>
             <div style={styles.iconCircleProductIconRight}> {/* Asegúrate de usar iconCircleProductIconRight */}

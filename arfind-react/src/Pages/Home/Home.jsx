@@ -96,12 +96,23 @@ const Home = () => {
             devices.map((device, index) => (
               <DispositivoCard 
                 key={index}
-                title={device.plan} // Asume que `usuario` es el título del dispositivo
-                lastUpdate={device.ult_actualizacion?.toDate().toLocaleString() || "Sin actualizaciones"} // Convierte la marca de tiempo
-                updateRate={'15 minutos'} // Ejemplo de uso del plan como tasa de actualización
-                battery={`${device.bateria}%`} // Muestra la batería como porcentaje
-                imageSrc={`https://via.placeholder.com/150`} // Asigna una imagen de placeholder o usa una imagen real
+                title={device.apodo || "Sin apodo"} // Usa el campo "apodo" o muestra "Sin apodo" si está vacío
+
+                // Verificación de `ult_actualizacion` para manejarla según el tipo de dato
+                lastUpdate={
+                  device.ult_actualizacion 
+                    ? (typeof device.ult_actualizacion === "string" || device.ult_actualizacion instanceof Date 
+                        ? new Date(device.ult_actualizacion).toLocaleString()  // Si ya es un Date o string, lo convierte
+                        : new Date(device.ult_actualizacion.seconds * 1000).toLocaleString() // Si es un timestamp de Firebase
+                      )
+                    : "Sin actualizaciones"
+                }
+
+                updateRate={'15 minutos'} // Muestra la tasa de actualización, ajusta si es necesario
+                battery={`${device.bateria?.toFixed(0) || 0}%`} // Muestra batería como porcentaje sin decimales
+                imageSrc={`https://via.placeholder.com/150`} // Puedes reemplazar la imagen con otra URL si existe
               />
+
             ))
           )}
         </div>

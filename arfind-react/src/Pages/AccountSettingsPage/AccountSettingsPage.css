@@ -1,8 +1,11 @@
-.account-form {
+  .account-form {
     display: flex;
     flex-direction: column;
   }
-  
+  .account-settings{
+    width: 50%;
+    margin: auto;
+  }
   .input-field {
     display: flex;
     flex-direction: column;
@@ -54,6 +57,8 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 60%;
+    margin: 2rem auto;
   }
   
   .save-button:hover {
