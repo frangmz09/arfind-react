@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import NotificationPanel from '../NotificationPanel/NotificationPanel';
 import Logo from '../Logo/Logo';
 import NavBarButton from '../NavBarButton/NavBarButton';
 import './NavBar.css';
-import { useLocation } from 'react-router-dom';
 
 const NavBar = ({ isLoggedIn, onLogout }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -30,6 +29,23 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
       setLogoSize('50px');
     }
   }, [location]);  // Dependemos de 'location' para que se ejecute en cada cambio de ruta
+
+  // useEffect para manejar el desplazamiento a anclas (hashes) en /landing
+  useEffect(() => {
+    if (location.pathname === '/landing' && location.hash) {
+      const targetElement = document.querySelector(location.hash);
+      if (targetElement) {
+        // Desplazamos directamente a la posición ajustada, sin necesidad de esperar
+        const navbarHeight = 80; // Cambia este valor a la altura de tu navbar
+        const targetPosition = targetElement.offsetTop - navbarHeight;
+
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth', // Desplazamiento suave
+        });
+      }
+    }
+  }, [location]);
 
   return (
     <div className="navbar">

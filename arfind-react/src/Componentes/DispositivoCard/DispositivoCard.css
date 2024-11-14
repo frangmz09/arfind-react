@@ -21,17 +21,28 @@
 }
 
 .card-title-container {
+    height: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    flex: 1;
+    width: 100%;
 }
 
 .card-title {
     margin: 0;
     font-size: 1rem;
     font-weight: bold;
+    cursor: pointer; /* Indica que el título es clickeable */
+}
+
+.card-title.editable {
+    background-color: #f0f8ff; /* Cambio de fondo para indicar que está en edición */
+    border: 1px solid #0486FF; /* Borde para resaltar la edición */
+    padding: 5px;
+    border-radius: 5px;
+    color: #0486FF; /* Cambio de color del texto cuando se está editando */
+    outline: none; /* Evita que aparezca un borde de foco predeterminado */
 }
 
 .edit-icon {
@@ -43,8 +54,8 @@
 
 .settings-icon {
     position: absolute;
-    right: 35px;
-    top: 10px;
+    right: 2.5rem;
+    top: 0.90rem;
     height: 1rem;
     width: auto; 
     cursor: pointer;
@@ -92,3 +103,39 @@
     transition: background-color 0.3s ease;
 }
 
+/* Estilos para el campo de texto de edición */
+.edit-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 50%;
+    padding: 5px;
+    border: 2px solid #0486FF;
+    border-radius: 5px;
+    outline: none;
+}
+
+.save-edit-button, .cancel-button {
+    background-color: #0486FF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 1px; 
+    cursor: pointer;
+    font-size: 0.8rem; /* Font más pequeño */
+    margin-left: 10px;
+    padding: 5px;
+}
+
+.save-edit-button:hover, .cancel-button:hover {
+    background-color: #0371d1; /* Cambio de color en hover */
+}
+
+.cancel-button {
+    background-color: #FF4444;
+}
+
+.cancel-button:hover {
+    background-color: #e03e3e;
+}
