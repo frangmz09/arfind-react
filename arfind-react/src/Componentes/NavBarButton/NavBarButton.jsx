@@ -44,6 +44,12 @@ const NavBarButton = ({ imgSrc, altText, isProfileButton, onClick, onLogout }) =
           <Link to="/account-settings" className="dropdown-item">
             Configuración de la cuenta
           </Link>
+          <Link to="https://sites.google.com/view/arfind-faq/inicio" className="dropdown-item">
+            FAQ
+          </Link>
+          <Link to="https://sites.google.com/view/tyc-arfind/inicio" className="dropdown-item">
+            Términos y condiciones
+          </Link>
           <button className="dropdown-item logout" onClick={onLogout}>
             Cerrar sesión
           </button>

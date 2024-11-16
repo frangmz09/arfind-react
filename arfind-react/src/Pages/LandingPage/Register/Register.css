@@ -100,3 +100,97 @@
     text-align: center;
     font-weight: bolder;
 }
+/* Fondo semitransparente del modal */
+.pin-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Contenedor del modal */
+  .pin-modal {
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Títulos del modal */
+  .pin-modal h3 {
+    font-size: 1.5rem;
+    color: #333333;
+    margin-bottom: 10px;
+  }
+  
+  /* Mensaje descriptivo */
+  .pin-modal p {
+    font-size: 1rem;
+    color: #666666;
+    margin-bottom: 20px;
+  }
+  
+  /* Campo de entrada del PIN */
+  .pin-input {
+    width: 50%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: 2px solid #cccccc;
+    border-radius: 10px;
+    outline: none;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease-in-out;
+    text-align: center;
+  }
+  
+  .pin-input:focus {
+    border-color: #0486FF;
+  }
+  
+  /* Botones del modal */
+  .pin-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .validate-pin-btn,
+  .close-pin-modal-btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  /* Botón para validar PIN */
+  .validate-pin-btn {
+    background-color: #0486FF;
+    color: white;
+  }
+  
+  .validate-pin-btn:hover {
+    background-color: #025DB2;
+  }
+  
+  /* Botón para cerrar el modal */
+  .close-pin-modal-btn {
+    background-color: #cccccc;
+    color: #333333;
+  }
+  
+  .close-pin-modal-btn:hover {
+    background-color: #999999;
+  }
+  

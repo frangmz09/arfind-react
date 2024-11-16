@@ -29,7 +29,8 @@ const PasarelaProductos = ({ products, height }) => {
         >
           {products.map((producto, index) => (
             <ProductCard 
-              key={index}
+              key={producto.id || index} // Usa el ID del producto como clave, si existe
+              id={producto.id} // Pasa el ID del producto a ProductCard
               title={producto.titulo}
               description={producto.tinydescripcion}
               imageSrc={producto.imagen}

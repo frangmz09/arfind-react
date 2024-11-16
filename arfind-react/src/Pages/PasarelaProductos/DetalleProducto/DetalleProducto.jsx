@@ -1,38 +1,61 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import './DetalleProducto.css';
+import { getPlanes } from '../../../services/planesService'; // Servicio para obtener planes
+import { getProductoById } from '../../../services/productosService'; // Servicio para obtener el producto por ID
 
-const DetalleProducto = ({ producto }) => {
+const DetalleProducto = () => {
+  const { id } = useParams(); // Obtén el ID del producto desde la URL
+  const [producto, setProducto] = useState(null);
   const [planes, setPlanes] = useState([]);
   const [planSeleccionado, setPlanSeleccionado] = useState(null);
   const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPlanes = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(
-          'https://arfindfranco-t22ijacwda-uc.a.run.app/planes/getPlanes'
-        );
-        if (!response.ok) {
-          throw new Error('Error al obtener los planes');
-        }
-        const data = await response.json();
-        // Filtrar planes con título válido
-        const planesValidos = data.data.filter((plan) => plan.titulo);
+        // Carga del producto
+        const productoData = await getProductoById(id);
+        setProducto(productoData);
+
+        // Carga de planes
+        const planesData = await getPlanes();
+        const planesValidos = planesData.filter((plan) => plan.titulo); // Filtrar solo planes válidos
         setPlanes(planesValidos);
-      } catch (error) {
-        console.error('Error al obtener los planes:', error);
-        setPlanes([]);
+      } catch (err) {
+        console.error('Error al cargar los datos:', err);
+        setError('Error al cargar el producto o los planes.');
       } finally {
         setCargando(false);
       }
     };
 
-    fetchPlanes();
-  }, []);
+    fetchData();
+  }, [id]);
 
   const handlePlanChange = (event) => {
     setPlanSeleccionado(event.target.value);
   };
+
+  const handleComprarAhora = () => {
+    if (planSeleccionado) {
+      alert(`Has seleccionado el plan ID: ${planSeleccionado}`);
+      // Implementa aquí la lógica para redirigir o procesar la compra
+    }
+  };
+
+  if (cargando) {
+    return <p>Cargando datos...</p>;
+  }
+
+  if (error) {
+    return <p className="error-message">{error}</p>;
+  }
+
+  if (!producto) {
+    return <p>No se encontró el producto.</p>;
+  }
 
   return (
     <div className="detalle-producto">
@@ -47,13 +70,12 @@ const DetalleProducto = ({ producto }) => {
           <label htmlFor="plan-select" className="detalle-producto__label">
             Seleccione un plan:
           </label>
-          {cargando ? (
-            <p>Cargando planes...</p>
-          ) : planes.length > 0 ? (
+          {planes.length > 0 ? (
             <select
               id="plan-select"
               className="detalle-producto__select"
               onChange={handlePlanChange}
+              value={planSeleccionado || ''}
             >
               <option value="">Seleccione un plan</option>
               {planes.map((plan) => (
@@ -69,6 +91,7 @@ const DetalleProducto = ({ producto }) => {
         <button
           className="detalle-producto__boton-comprar"
           disabled={!planSeleccionado}
+          onClick={handleComprarAhora}
         >
           Comprar ahora
         </button>

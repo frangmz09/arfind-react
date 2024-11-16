@@ -14,46 +14,58 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true); // Estado para manejar la carga
   const [error, setError] = useState(null); // Estado para manejar posibles errores
 
+  const fetchProducts = async () => {
+    try {
+      const productsResponse = await getProductos();
+      if (productsResponse.length === 0) {
+        setError((prevError) =>
+          prevError ? `${prevError} No se encontraron productos.` : 'No se encontraron productos.'
+        );
+      } else {
+        setProducts(productsResponse);
+      }
+    } catch (err) {
+      console.error('Error obteniendo los productos:', err);
+      setError((prevError) =>
+        prevError ? `${prevError} Error obteniendo productos.` : 'Error obteniendo productos.'
+      );
+    }
+  };
+
+  const fetchDevices = async (token) => {
+    try {
+      const devicesResponse = await getDispositivosByUsuario(token);
+      if (devicesResponse.length === 0) {
+        setError((prevError) =>
+          prevError ? `${prevError} No se encontraron dispositivos.` : 'No se encontraron dispositivos.'
+        );
+      } else {
+        setDevices(devicesResponse);
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 404) {
+        console.warn('No se encontraron dispositivos para este usuario.');
+        setDevices([]); // Mantén devices vacío pero sin bloquear la carga de productos
+      } else {
+        console.error('Error obteniendo los dispositivos:', err);
+      }
+    }
+  };
+
   useEffect(() => {
     document.title = 'ARfind - Panel de Control';
 
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+      setError('No se ha encontrado el token de autenticación.');
+      setIsLoading(false);
+      return;
+    }
+
     const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('userToken');
-
-        if (!token) {
-          setError('No se ha encontrado el token de autenticación.');
-          setIsLoading(false);
-          return;
-        }
-
-        const [productsResponse, devicesResponse] = await Promise.all([
-          getProductos(),
-          getDispositivosByUsuario(token),
-        ]);
-
-        if (productsResponse.length === 0) {
-          setError('No se encontraron productos.');
-        } else {
-          setProducts(productsResponse);
-        }
-
-        if (devicesResponse.length === 0) {
-          setError('No se encontraron dispositivos.');
-        } else {
-          setDevices(devicesResponse);
-        }
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error obteniendo los datos:', error);
-        if (error.response && error.response.status === 403) {
-          setError('No tienes permisos para acceder a estos datos.');
-        } else {
-          setError('Ocurrió un error inesperado.');
-        }
-        setIsLoading(false);
-      }
+      setIsLoading(true);
+      await Promise.allSettled([fetchProducts(), fetchDevices(token)]);
+      setIsLoading(false);
     };
 
     fetchData();
@@ -71,16 +83,6 @@ const Home = () => {
       <div className="home-content">
         {error && <p className="error-message">{error}</p>}
 
-        <div className="pasarela-home">
-          {products.length === 0 ? (
-            <p>No hay productos disponibles.</p>
-          ) : (
-            <PasarelaProductos
-              products={products}
-              height="150px"
-            />
-          )}
-        </div>
 
         <h1 className="home-title">Tus Dispositivos</h1>
         <div className="home-cards">
@@ -93,12 +95,10 @@ const Home = () => {
                 title={device.apodo || 'Sin apodo'}
                 lastUpdate={
                   device.ult_actualizacion
-                    ? (typeof device.ult_actualizacion === 'string' ||
+                    ? typeof device.ult_actualizacion === 'string' ||
                       device.ult_actualizacion instanceof Date
-                        ? new Date(device.ult_actualizacion).toLocaleString()
-                        : new Date(
-                            device.ult_actualizacion.seconds * 1000
-                          ).toLocaleString())
+                      ? new Date(device.ult_actualizacion).toLocaleString()
+                      : new Date(device.ult_actualizacion.seconds * 1000).toLocaleString()
                     : 'Sin actualizaciones'
                 }
                 updateRate={'15 minutos'}
@@ -108,12 +108,23 @@ const Home = () => {
             ))
           )}
         </div>
-
-        <div className="extraButtons">
-          <a href="/mapa" className="visualizar-ubicacion-btn">
-            Visualizar ubicación de todos los dispositivos
-          </a>
+        <div className="pasarela-home">
+          <h2 className='home-title'>Realiza el pedido de tu próximo dispositivo</h2>
+          {products.length === 0 ? (
+            <p>No hay productos disponibles.</p>
+          ) : (
+            <PasarelaProductos products={products} height="150px" />
+          )}
         </div>
+
+        {/* Mostrar el botón solo si hay dispositivos */}
+        {devices.length > 0 && (
+          <div className="extraButtons">
+            <a href="/mapa" className="visualizar-ubicacion-btn">
+              Visualizar ubicación de todos los dispositivos
+            </a>
+          </div>
+        )}
 
         <div className="home-buttons">
           <BtnAux image="/images/settings.png" altText="Configuración" link="/" />

@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import './Register.css';
 import BtnAux from '../../../Componentes/BtnAux/BtnAux';
 import Logo from '../../../Componentes/Logo/Logo';
+import { sendCodeByMail, verifyPin, registerUser } from '../../../services/authService';
+import { useNavigate } from 'react-router-dom'; // Importar useNavigate
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../../../firebaseConfig'; // Ajusta la ruta según tu configuración
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +16,14 @@ const Register = () => {
     telefono: '',
     password: '',
     confirmPassword: '',
-    edad: '' // Asegúrate de agregar el campo `edad` si es necesario
+    edad: ''
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [pin, setPin] = useState('');
+  const navigate = useNavigate(); // Hook para redirigir
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,47 +53,32 @@ const Register = () => {
 
     if (Object.keys(formErrors).length === 0) {
       setLoading(true);
-      setSuccessMessage('');
-
       try {
-        const response = await fetch('https://arfindfranco-t22ijacwda-uc.a.run.app/clientes/registerUser', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-              nombre: formData.nombre,
-              apellido: formData.apellido,
-              email: formData.email,
-              telefono: formData.telefono,
-              edad: formData.edad,
-              password: formData.password,
-          }),
-      });
-
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Error en el registro');
-        }
-
-        setSuccessMessage('¡Registro exitoso!');
-        setFormData({
-          nombre: '',
-          apellido: '',
-          email: '',
-          telefono: '',
-          password: '',
-          confirmPassword: '',
-          edad: '',
-        });
-
+        await sendCodeByMail({ email: formData.email, nombre: formData.nombre });
+        setShowPinModal(true);
       } catch (error) {
-        setErrors({ general: error.message || 'Error en el registro. Por favor intenta nuevamente.' });
+        setErrors({ general: 'Error al enviar el PIN. Inténtalo nuevamente.' });
       } finally {
         setLoading(false);
       }
+    }
+  };
+
+  const handlePinSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await verifyPin({ email: formData.email, pin });
+      if (response.result) {
+        await registerUser(formData);
+        setSuccessMessage('¡Registro exitoso! Redirigiendo al login...');
+        setTimeout(() => navigate('/login'), 3000); // Redirigir tras 3 segundos
+      } else {
+        setErrors({ general: 'PIN inválido. Inténtalo nuevamente.' });
+      }
+    } catch (error) {
+      setErrors({ general: 'Error al validar el PIN. Inténtalo nuevamente.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -204,6 +194,35 @@ const Register = () => {
           </button>
         </form>
       </div>
+
+      {showPinModal && (
+        <div className="pin-modal-overlay">
+          <div className="pin-modal">
+            <h3>Verifica tu correo</h3>
+            <p>Hemos enviado un código de verificación a tu correo. Ingresa el PIN para continuar.</p>
+            <input
+              type="text"
+              className="pin-input"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              placeholder="Ingresa el PIN"
+              maxLength="6"
+            />
+            <div className="pin-modal-buttons">
+              <button className="validate-pin-btn" onClick={handlePinSubmit} disabled={loading}>
+                {loading ? 'Validando...' : 'Validar PIN'}
+              </button>
+              <button
+                className="close-pin-modal-btn"
+                onClick={() => setShowPinModal(false)}
+                disabled={loading}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
