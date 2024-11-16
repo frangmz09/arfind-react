@@ -4,7 +4,7 @@ import logoRectangle from '/images/logo.png';
 import { useLocation } from 'react-router-dom';
 
 const Logo = ({ type = 'icon', altText = "Logo", size = "100px" }) => {
-  const isLandingPage = location.pathname === '/landing';
+  const isLandingPage = (location.pathname === '/landing' || location.pathname === '/about' || location.pathname === '/contact');
   const logoSrc = isLandingPage ? logoRectangle : (type === 'logo' ? logoRectangle : logoSquare);
   
 

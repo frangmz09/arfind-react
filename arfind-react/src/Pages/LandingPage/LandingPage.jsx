@@ -11,7 +11,37 @@ import vector2 from '/images/vector_2.png';
 import iconPersonas from '/images/icon_personas.png';
 import iconMascotas from '/images/icon_mascotas.png';
 import iconAutos from '/images/icon_autos.png';
+import './LandingPage.css'; // Archivo CSS para estilos
 
+
+const testimonios = [
+  {
+    nombre: "Juan Pérez",
+    comentario: "ARfind me ha dado la tranquilidad de saber siempre dónde están mis hijos. La aplicación es muy fácil de usar.",
+    calificacion: 5,
+  },
+  {
+    nombre: "Ana Gómez",
+    comentario: "He probado otros sistemas, pero ARfind es el más preciso y confiable. Lo recomiendo para todos los padres.",
+    calificacion: 4,
+  },
+  {
+    nombre: "Carlos Ruiz",
+    comentario: "Excelente servicio y atención al cliente. La aplicación ha funcionado perfecto para rastrear mi auto.",
+    calificacion: 5,
+  },
+];
+
+// Función para renderizar estrellas según la calificación
+const renderStars = (calificacion) => {
+  const stars = [];
+  for (let i = 0; i < 5; i++) {
+    stars.push(
+      <span key={i} style={{ color: i < calificacion ? "#FFD700" : "#ddd" }}>★</span>
+    );
+  }
+  return stars;
+};
 const Landing = () => {
   
   return (
@@ -158,11 +188,27 @@ const Landing = () => {
           </div>
         </div>
       </section>
-
       {/* Footer */}
       <footer style={styles.footer}>
         <p>Protegé lo que más valorás con ARfind. ¿Listo para empezar?</p>
       </footer>
+      <div class="start-button-container">
+        <a href="/login" class="start-button">Acceder al sistema</a>
+      </div>
+      {/* Testimonios Section */}
+      <section style={styles.testimonios}>
+        <h2 style={styles.sectionTitle}>Valoraciones de Nuestros Clientes</h2>
+        <div style={styles.testimoniosContainer}>
+          {testimonios.map((testimonio, index) => (
+            <div key={index} style={styles.testimonioCard}>
+              <p style={styles.testimonioNombre}>{testimonio.nombre}</p>
+              <p style={styles.testimonioComentario}>“{testimonio.comentario}”</p>
+              <div style={styles.testimonioCalificacion}>{renderStars(testimonio.calificacion)}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
     </div>
   );
 };
@@ -514,6 +560,39 @@ const styles = {
       alignItems: 'center',
       marginLeft: '10px', // Ajuste para alinearlo a la derecha
       overflow: 'hidden', // Asegura que la imagen no sobresalga
+    },
+    testimonios: {
+      padding: '70px 40px',
+      textAlign: 'center',
+    },
+    testimoniosContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '20px',
+      flexWrap: 'wrap',
+    },
+    testimonioCard: {
+      backgroundColor: '#FFFFFF',
+      border: '1px solid #E0E0E0',
+      borderRadius: '8px',
+      padding: '20px',
+      width: '250px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+      textAlign: 'left',
+    },
+    testimonioNombre: {
+      fontWeight: 'bold',
+      fontSize: '16px',
+      marginBottom: '10px',
+    },
+    testimonioComentario: {
+      fontSize: '14px',
+      color: '#666666',
+      marginBottom: '10px',
+    },
+    testimonioCalificacion: {
+      fontSize: '16px',
+      color: '#FFD700', // Color dorado para las estrellas
     },
   sectionSubTitle: {},
 };

@@ -1,0 +1,22 @@
+.start-button-container {
+    text-align: center; /* Centra el botón */
+}
+
+.start-button {
+    background-color: #007BFF; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    padding: 20px 40px; /* Más espaciado interior para hacerlo más grande */
+    border-radius: 8px; /* Bordes redondeados */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    font-size: 20px; /* Aumenta el tamaño del texto */
+    display: inline-block; /* Hace que el enlace se comporte como un bloque */
+    transition: all 0.3s ease; /* Transición suave para todos los cambios */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    font-weight: bolder;
+}
+
+.start-button:hover {
+    background-color: #0056b3; /* Color de fondo al pasar el ratón */
+    transform: scale(1.1); /* Aumenta el tamaño del botón al pasar el ratón */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra más fuerte al hacer hover */
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ProductCard from '../ProductCard/ProductCard'; // Asegúrate de que la ruta sea correcta
+import ProductCard from '../../Pages/PasarelaProductos/ProductCard/ProductCard'; // Asegúrate de que la ruta sea correcta
 import './PasarelaProductos.css';
 
 const PasarelaProductos = ({ products, height }) => {

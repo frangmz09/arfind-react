@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import './PanelMapa.css';
 import Logo from '../../Componentes/Logo/Logo'; // Importa tu componente Logo
 import BtnAux from '../../Componentes/BtnAux/BtnAux'; // Importa tu componente BtnAux
-import Mapa from '../../Componentes/Mapa/Mapa'; // Importa tu componente DispositivoCard
+import Mapa from '../../Pages/Home/Mapa/Mapa'; // Importa tu componente DispositivoCard
 
 
 const PanelMapa = ({ devices }) => {

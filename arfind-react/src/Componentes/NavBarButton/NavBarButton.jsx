@@ -38,6 +38,9 @@ const NavBarButton = ({ imgSrc, altText, isProfileButton, onClick, onLogout }) =
       </button>
       {isProfileButton && (
         <div className={`dropdown-menu ${isOpen ? 'open' : ''}`}>
+          <Link to="/" className="dropdown-item">
+            Panel de control
+          </Link>
           <Link to="/account-settings" className="dropdown-item">
             Configuración de la cuenta
           </Link>
@@ -49,7 +52,6 @@ const NavBarButton = ({ imgSrc, altText, isProfileButton, onClick, onLogout }) =
     </div>
   );
 };
-
 
 NavBarButton.propTypes = {
   imgSrc: PropTypes.string.isRequired,

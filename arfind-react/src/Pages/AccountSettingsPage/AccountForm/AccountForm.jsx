@@ -1,6 +1,6 @@
 // AccountForm.jsx
 import React, { useState } from 'react';
-import InputField from '../InputField/InputField';
+import InputField from '../../../Componentes/InputField/InputField';
 import editIcon from '/images/edit.png'; // Importa el icono de edición
 
 const AccountForm = ({ user, onSave }) => {

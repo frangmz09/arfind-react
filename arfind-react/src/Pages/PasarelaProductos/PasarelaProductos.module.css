@@ -1,0 +1,18 @@
+
+.pasarela-productos {
+  padding: 20px;
+  text-align: center;
+}
+
+.pasarela-productos__title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.pasarela-productos__list {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}

@@ -1,0 +1,128 @@
+.detalle-producto {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 30px auto;
+  max-width: 600px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.detalle-producto:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.detalle-producto__imagen {
+  margin-bottom: 20px;
+}
+
+.detalle-producto__imagen img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.detalle-producto__informacion {
+  text-align: center;
+}
+
+.detalle-producto__titulo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.detalle-producto__descripcion {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.detalle-producto__precio {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0486FF;
+  margin-bottom: 20px;
+}
+
+.detalle-producto__planes {
+  margin-bottom: 20px;
+}
+
+.detalle-producto__label {
+  font-size: 1rem;
+  color: #444;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.detalle-producto__select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detalle-producto__select:focus {
+  border-color: #0486FF;
+  box-shadow: 0 0 5px rgba(4, 134, 255, 0.5);
+  outline: none;
+}
+
+.detalle-producto__select option {
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.detalle-producto__boton-comprar {
+  background-color: #0486FF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.detalle-producto__boton-comprar:hover {
+  background-color: #0366cc;
+  transform: translateY(-3px);
+}
+
+.detalle-producto__boton-comprar:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.detalle-producto__boton-comprar:disabled:hover {
+  transform: none;
+}
+
+@media (min-width: 768px) {
+  .detalle-producto {
+    flex-direction: row;
+    padding: 30px;
+  }
+
+  .detalle-producto__imagen {
+    flex: 1;
+    margin-right: 30px;
+  }
+
+  .detalle-producto__informacion {
+    flex: 2;
+    text-align: left;
+  }
+}

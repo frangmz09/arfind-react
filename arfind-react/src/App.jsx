@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Register from './Componentes/Register/Register';
-import Login from './Componentes/Login/Login';
+import Register from './Pages/LandingPage/Register/Register';
+import Login from './Pages/LandingPage/Login/Login';
 import Home from './Pages/Home/Home';
 import LandingPage from './Pages/LandingPage/LandingPage';
 import AccountSettingsPage from './Pages/AccountSettingsPage/AccountSettingsPage';
@@ -13,11 +13,13 @@ import axios from 'axios';
 
 
 
-import DetalleProducto from './Componentes/DetalleProducto/DetalleProducto'; 
+import DetalleProducto from './Pages/PasarelaProductos/DetalleProducto/DetalleProducto'; 
 
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import './App.css';
+import './styles/App.css';
+import AboutUs from './Pages/AboutUs/AboutUs';
+import Contact from './Pages/Contact/Contact';
 const productoEjemplo = {
   imagen: 'https://firebasestorage.googleapis.com/v0/b/arfind.appspot.com/o/perro.png?alt=media&token=c7c4a8e9-5064-4887-ada6-ab55874c483d',
   titulo: 'Producto Ejemplo',
@@ -62,7 +64,9 @@ function App() {
       <div className="main-content">
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/landing" />} />
+          <Route path="/contact" element={<Contact/>} />
           <Route path="/landing" element={<LandingPage />} />
+          <Route path="/about" element={<AboutUs />} />
           <Route path="/producto" element={     <DetalleProducto producto={productoEjemplo} />} />
           <Route path="/mapa" element={true ? <PanelMapa /> : <Navigate to="/login" />} />
           <Route path="/register" element={!isLoggedIn ? <Register /> : <Navigate to="/" />} />

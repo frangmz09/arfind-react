@@ -1,0 +1,11 @@
+
+.home {
+  text-align: center;
+  padding: 20px;
+}
+
+.home__title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}

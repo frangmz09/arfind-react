@@ -1,10 +1,11 @@
+
 import React from 'react';
-import './Footer.module.css';
+import './Footer.css';
 
 const Footer = () => {
   return (
     <footer className="footer">
-      <p className="footer-text">© Copyright 2024 ARfind</p>
+      <p>© {new Date().getFullYear()} Mi App. Todos los derechos reservados.</p>
     </footer>
   );
 };

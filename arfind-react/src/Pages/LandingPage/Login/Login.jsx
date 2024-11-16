@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import './Login.css';
-import BtnAux from '../BtnAux/BtnAux';
-import Logo from '../Logo/Logo';
+import BtnAux from '../../../Componentes/BtnAux/BtnAux';
+import Logo from '../../../Componentes/Logo/Logo';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');

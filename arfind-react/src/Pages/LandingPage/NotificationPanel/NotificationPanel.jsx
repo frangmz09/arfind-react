@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import NotificationItem from '../NotificationItem/NotificationItem'; // Verifica la ruta del archivo
+import NotificationItem from '../../../Componentes/NotificationItem/NotificationItem'; // Verifica la ruta del archivo
 import './NotificationPanel.css'; // Verifica la ruta del archivo
 
 const NotificationPanel = ({ notifications, onClose }) => {

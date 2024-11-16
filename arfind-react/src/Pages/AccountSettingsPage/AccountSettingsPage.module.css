@@ -1,0 +1,11 @@
+
+.account-settings-page {
+  padding: 20px;
+  text-align: center;
+}
+
+.account-settings-page__title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}

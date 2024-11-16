@@ -1,6 +1,6 @@
 // AccountSettingsPage.jsx
 import React, { useState } from 'react';
-import AccountForm from '../../Componentes/AccountForm/AccountForm';
+import AccountForm from './AccountForm/AccountForm';
 import './AccountSettingsPage.css';
 
 const AccountSettingsPage = () => {

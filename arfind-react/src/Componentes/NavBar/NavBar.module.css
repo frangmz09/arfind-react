@@ -1,0 +1,60 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 4rem;
+  }
+  
+  .navbarLogoLink {
+    text-decoration: none;
+  }
+  
+  .navbarLinks {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+  }
+  
+  .navLink {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .navLink:hover {
+    color: #0486ff;
+  }
+  
+  .navbarIcons {
+    display: flex;
+    gap: 15px;
+    margin-left: 30px; /* Añade espacio entre los links y los iconos */
+    padding-right: 20px; /* Asegura espacio del borde derecho */
+  }
+  
+  .loginButton {
+    background-color: #0486ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 20px; /* Espacio entre "Contacto" y "INGRESAR" */
+    margin-right: 40px;
+  }
+  
+  .loginButton:hover {
+    background-color: #0366cc;
+  }
+  
