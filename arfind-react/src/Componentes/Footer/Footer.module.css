@@ -1,17 +1,47 @@
-/* Estilo del footer */
+/* Footer.module.css */
+
 .footer {
-  background-color: #D9D9D9; 
-  padding: 10px 20px;
-  width: 100%; 
-  box-sizing: border-box; 
+  background: linear-gradient(30deg, #000000, rgb(4, 134, 255)); /* Gradiente moderno */
+  color: white;
+  padding: 15px 40px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start; 
-  color: #424242; 
-  font-size: 0.8rem;
-  position: fixed; 
-  bottom: 0; 
-  left: 0; 
-  z-index: 98; 
+  justify-content: center;
+  z-index: 100;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0px -3px 5px rgba(0, 0, 0, 0.2); /* Sombra */
 }
 
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.footerLeft {
+  font-size: 0.9rem;
+}
+
+.footerRight {
+  display: flex;
+  gap: 20px; /* Espaciado entre enlaces */
+}
+
+.footerLink {
+  color: #ecf0f1; /* Color claro */
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: all 0.3s ease; /* Transición suave */
+}
+
+.footerLink:hover {
+  color: #1abc9c; /* Verde llamativo */
+  text-decoration: underline;
+}
