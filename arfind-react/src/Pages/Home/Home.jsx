@@ -4,57 +4,60 @@ import Logo from '../../Componentes/Logo/Logo';
 import BtnAux from '../../Componentes/BtnAux/BtnAux';
 import DispositivoCard from '../../Componentes/DispositivoCard/DispositivoCard';
 import PasarelaProductos from '../../Componentes/PasarelaProductos/PasarelaProductos';
-import LoadingScreen from '../../Componentes/LoadingScreen/LoadingScreen'; // Pantalla de carga
-import { getDispositivosByUsuario } from '../../services/dipositivosService'; // Servicio para dispositivos
-import { getProductos } from '../../services/productosService'; // Servicio para productos
+import LoadingScreen from '../../Componentes/LoadingScreen/LoadingScreen';
+import { getDispositivosByUsuario, getDispositivosInvitados, generateCodigoInvitado } from '../../services/dipositivosService';
+import { getProductos } from '../../services/productosService';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
-  const [devices, setDevices] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Estado para manejar la carga
-  const [error, setError] = useState(null); // Estado para manejar posibles errores
+  const [ownDevices, setOwnDevices] = useState([]);
+  const [invitedDevices, setInvitedDevices] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchProducts = async () => {
     try {
       const productsResponse = await getProductos();
-      if (productsResponse.length === 0) {
-        setError((prevError) =>
-          prevError ? `${prevError} No se encontraron productos.` : 'No se encontraron productos.'
-        );
-      } else {
-        setProducts(productsResponse);
-      }
+      setProducts(productsResponse);
     } catch (err) {
       console.error('Error obteniendo los productos:', err);
-      setError((prevError) =>
-        prevError ? `${prevError} Error obteniendo productos.` : 'Error obteniendo productos.'
-      );
+      setError('Error obteniendo productos.');
     }
   };
 
   const fetchDevices = async (token) => {
     try {
-      const devicesResponse = await getDispositivosByUsuario(token);
-      if (devicesResponse.length === 0) {
-        setError((prevError) =>
-          prevError ? `${prevError} No se encontraron dispositivos.` : 'No se encontraron dispositivos.'
-        );
-      } else {
-        setDevices(devicesResponse);
-      }
+      const [ownDevicesResponse, invitedDevicesResponse] = await Promise.all([
+        getDispositivosByUsuario(token),
+        getDispositivosInvitados(token),
+      ]);
+      setOwnDevices(ownDevicesResponse);
+      setInvitedDevices(invitedDevicesResponse);
     } catch (err) {
-      if (err.response && err.response.status === 404) {
-        console.warn('No se encontraron dispositivos para este usuario.');
-        setDevices([]); // Mantén devices vacío pero sin bloquear la carga de productos
-      } else {
-        console.error('Error obteniendo los dispositivos:', err);
-      }
+      console.error('Error obteniendo los dispositivos:', err);
+      setError('Error obteniendo dispositivos.');
     }
   };
 
+  const handleGenerateCodigo = async (deviceId) => {
+    try {
+      const token = localStorage.getItem('userToken');
+      const response = await generateCodigoInvitado(deviceId, token);
+  
+      // Actualizar el código en el dispositivo correspondiente
+      setOwnDevices((prevDevices) =>
+        prevDevices.map((device) =>
+          device.id === deviceId ? { ...device, codigo_invitado: response.codigo_invitado } : device
+        )
+      );
+    } catch (error) {
+      console.error('Error generando código de invitado:', error);
+      setError('No se pudo generar el código. Intenta nuevamente.');
+    }
+  };  
+
   useEffect(() => {
     document.title = 'ARfind - Panel de Control';
-
     const token = localStorage.getItem('userToken');
     if (!token) {
       setError('No se ha encontrado el token de autenticación.');
@@ -83,33 +86,71 @@ const Home = () => {
       <div className="home-content">
         {error && <p className="error-message">{error}</p>}
 
-
-        <h1 className="home-title">Tus Dispositivos</h1>
+        <h1 className="home-title">Tus Dispositivos Propios</h1>
         <div className="home-cards">
-          {devices.length === 0 ? (
-            <p>No tienes dispositivos registrados.</p>
+          {ownDevices.length === 0 ? (
+            <p>No tienes dispositivos propios registrados.</p>
           ) : (
-            devices.map((device, index) => (
+            ownDevices.map((device, index) => (
               <DispositivoCard
                 key={index}
                 title={device.apodo || 'Sin apodo'}
                 lastUpdate={
                   device.ult_actualizacion
-                    ? typeof device.ult_actualizacion === 'string' ||
-                      device.ult_actualizacion instanceof Date
-                      ? new Date(device.ult_actualizacion).toLocaleString()
-                      : new Date(device.ult_actualizacion.seconds * 1000).toLocaleString()
+                    ? device.ult_actualizacion._seconds
+                      ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
+                      : typeof device.ult_actualizacion === 'string'
+                      ? device.ult_actualizacion
+                      : 'Fecha no válida'
                     : 'Sin actualizaciones'
                 }
                 updateRate={'15 minutos'}
                 battery={`${device.bateria?.toFixed(0) || 0}%`}
                 imageSrc={`https://via.placeholder.com/150`}
+                isOwnDevice={true}
+                codigoInvitado={device.codigo_invitado}
+                onGenerateCodigo={() => handleGenerateCodigo(device.id)}
               />
             ))
           )}
         </div>
+
+        {invitedDevices.length > 0 && (
+          <>
+            <h1 className="home-title">Dispositivos Invitados</h1>
+            <div className="home-cards">
+              {invitedDevices.map((device, index) => (
+                <DispositivoCard
+                  key={index}
+                  title={device.apodo || 'Sin apodo'}
+                  lastUpdate={
+                    device.ult_actualizacion
+                      ? device.ult_actualizacion._seconds
+                        ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
+                        : typeof device.ult_actualizacion === 'string'
+                        ? device.ult_actualizacion
+                        : 'Fecha no válida'
+                      : 'Sin actualizaciones'
+                  }
+                  updateRate={'15 minutos'}
+                  battery={`${device.bateria?.toFixed(0) || 0}%`}
+                  imageSrc={`https://via.placeholder.com/150`}
+                  isOwnDevice={false}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        {/* Mostrar el botón solo si hay dispositivos propios */}
+        {ownDevices.length > 0 && (
+          <div className="extraButtons">
+            <a href="/mapa" className="visualizar-ubicacion-btn">
+              Visualizar ubicación de todos los dispositivos
+            </a>
+          </div>
+        )}
         <div className="pasarela-home">
-          <h2 className='home-title'>Realiza el pedido de tu próximo dispositivo</h2>
+          <h2 className="home-title">Realiza el pedido de tu próximo dispositivo</h2>
           {products.length === 0 ? (
             <p>No hay productos disponibles.</p>
           ) : (
@@ -117,14 +158,7 @@ const Home = () => {
           )}
         </div>
 
-        {/* Mostrar el botón solo si hay dispositivos */}
-        {devices.length > 0 && (
-          <div className="extraButtons">
-            <a href="/mapa" className="visualizar-ubicacion-btn">
-              Visualizar ubicación de todos los dispositivos
-            </a>
-          </div>
-        )}
+       
 
         <div className="home-buttons">
           <BtnAux image="/images/settings.png" altText="Configuración" link="/" />

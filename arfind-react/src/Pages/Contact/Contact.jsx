@@ -21,11 +21,11 @@ const Contact = () => {
         </div>
         <div style={styles.infoItem}>
           <h3 style={styles.infoTitle}>Teléfono</h3>
-          <p style={styles.infoText}>+54 5471-2214</p>
+          <p style={styles.infoText}>0800-123-ARFIND</p>
         </div>
         <div style={styles.infoItem}>
           <h3 style={styles.infoTitle}>Correo Electrónico</h3>
-          <p style={styles.infoText}>arfindoficial@arfind.com</p>
+          <p style={styles.infoText}>soporte@arfind.com</p>
         </div>
       </section>
 
