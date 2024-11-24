@@ -3,10 +3,9 @@ import './Register.css';
 import BtnAux from '../../../Componentes/BtnAux/BtnAux';
 import Logo from '../../../Componentes/Logo/Logo';
 import { sendCodeByMail, verifyPin, registerUser } from '../../../services/authService';
-import { useNavigate } from 'react-router-dom'; // Importar useNavigate
+import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../../../firebaseConfig'; // Ajusta la ruta según tu configuración
-
+import { auth, db } from '../../../../firebaseConfig';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -16,20 +15,21 @@ const Register = () => {
     telefono: '',
     password: '',
     confirmPassword: '',
-    edad: ''
+    edad: '',
+    aceptaTerminos: false, // Nuevo campo para el checkbox
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   const [pin, setPin] = useState('');
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -44,10 +44,17 @@ const Register = () => {
     if (!formData.email.trim()) formErrors.email = 'El correo electrónico es obligatorio.';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) formErrors.email = 'El correo electrónico no es válido.';
     if (!formData.telefono.trim()) formErrors.telefono = 'El teléfono es obligatorio.';
-    if (!formData.edad.trim() || isNaN(formData.edad)) formErrors.edad = 'La edad es obligatoria y debe ser un número.';
+    if (!formData.edad.trim() || isNaN(formData.edad)) {
+      formErrors.edad = 'La edad es obligatoria y debe ser un número.';
+    } else if (parseInt(formData.edad, 10) < 18) {
+      formErrors.edad = 'Debes tener al menos 18 años para registrarte.';
+    }
     if (!formData.password.trim()) formErrors.password = 'La contraseña es obligatoria.';
     else if (formData.password.length < 6) formErrors.password = 'La contraseña debe tener al menos 6 caracteres.';
     if (formData.password !== formData.confirmPassword) formErrors.confirmPassword = 'Las contraseñas no coinciden.';
+    if (!formData.aceptaTerminos) {
+      formErrors.aceptaTerminos = 'Debes aceptar los términos y condiciones.';
+    }
 
     setErrors(formErrors);
 
@@ -186,6 +193,28 @@ const Register = () => {
                 autoComplete="off"
               />
               {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="checkbox-container">
+              <label>
+                <input
+                  type="checkbox"
+                  name="aceptaTerminos"
+                  checked={formData.aceptaTerminos}
+                  onChange={handleChange}
+                />
+                Acepto los{' '}
+                <a
+                  href="https://sites.google.com/view/tyc-arfind/inicio"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  términos y condiciones
+                </a>
+              </label>
+              {errors.aceptaTerminos && <span className="error-message">{errors.aceptaTerminos}</span>}
             </div>
           </div>
 

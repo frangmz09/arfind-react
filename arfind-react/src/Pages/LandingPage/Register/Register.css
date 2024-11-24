@@ -193,4 +193,24 @@
   .close-pin-modal-btn:hover {
     background-color: #999999;
   }
+  .checkbox-container {
+    margin-top: 15px;
+    font-size: 0.9rem;
+  }
+  
+  .checkbox-container label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .checkbox-container a {
+    color: #0486FF;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .checkbox-container a:hover {
+    color: #025DB2;
+  }
   

@@ -1,4 +1,4 @@
-import { apiFetch } from './api'; // Mantén consistencia usando apiFetch en lugar de mezclar con axios
+import { apiFetch } from './api';
 
 export const generateCodigoInvitado = async (deviceId, token) => {
   try {
@@ -6,14 +6,14 @@ export const generateCodigoInvitado = async (deviceId, token) => {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json', // Asegúrate de incluir el tipo de contenido
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ deviceId }), // Serializa el cuerpo de la solicitud
+      body: JSON.stringify({ deviceId }),
     });
     return response;
   } catch (error) {
     console.error('Error generating codigo invitado:', error);
-    throw error; // Propaga el error para manejarlo en el componente
+    throw error;
   }
 };
 
@@ -41,6 +41,42 @@ export const getDispositivosInvitados = async (token) => {
     return response;
   } catch (error) {
     console.error('Error fetching dispositivos invitados:', error);
+    throw error;
+  }
+};
+
+// Modificar apodo del dispositivo
+export const updateApodoDispositivo = async (deviceId, apodo, token) => {
+  try {
+    const response = await apiFetch('/dispositivos/updateApodoDispositivo', {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ deviceId, apodo }),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error updating apodo del dispositivo:', error);
+    throw error;
+  }
+  
+};
+
+export const submitCodigoInvitado = async (codigoInvitado, token) => {
+  try {
+    const response = await apiFetch('/dispositivos/submitCodigoInvitado', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ codigo_invitado: codigoInvitado }),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error submitting codigo invitado:', error);
     throw error;
   }
 };

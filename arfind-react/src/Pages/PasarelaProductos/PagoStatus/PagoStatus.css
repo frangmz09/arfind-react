@@ -1,0 +1,35 @@
+.pago-status {
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.pago-exitoso {
+    color: green;
+}
+
+.pago-fallido {
+    color: red;
+}
+
+.pago-pendiente {
+    color: orange;
+}
+
+.pago-desconocido {
+    color: gray;
+}
+
+.button-pago {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #0486ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button-pago:hover {
+    background-color: #036dc9;
+}

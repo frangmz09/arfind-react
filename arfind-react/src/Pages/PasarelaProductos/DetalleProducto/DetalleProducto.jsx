@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './DetalleProducto.css';
 import { getPlanes } from '../../../services/planesService'; // Servicio para obtener planes
 import { getProductoById } from '../../../services/productosService'; // Servicio para obtener el producto por ID
+import { crearOrdenDinamicaWeb } from '../../../services/pagosService'; // Servicio de pagos
 
 const DetalleProducto = () => {
   const { id } = useParams(); // Obtén el ID del producto desde la URL
@@ -21,7 +22,7 @@ const DetalleProducto = () => {
 
         // Carga de planes
         const planesData = await getPlanes();
-        const planesValidos = planesData.filter((plan) => plan.titulo); // Filtrar solo planes válidos
+        const planesValidos = planesData.filter((plan) => plan.nombre); // Filtrar solo planes válidos
         setPlanes(planesValidos);
       } catch (err) {
         console.error('Error al cargar los datos:', err);
@@ -38,10 +39,28 @@ const DetalleProducto = () => {
     setPlanSeleccionado(event.target.value);
   };
 
-  const handleComprarAhora = () => {
+  const handleComprarAhora = async () => {
     if (planSeleccionado) {
-      alert(`Has seleccionado el plan ID: ${planSeleccionado}`);
-      // Implementa aquí la lógica para redirigir o procesar la compra
+      try {
+        const orden = {
+          nombreProducto: producto.titulo,
+          descripcionProducto: producto.descripcion,
+          imagenProducto: producto.imagen,
+          cantidad: 1, // Siempre 1 porque es un único producto
+          precio: producto.precio, // Precio del producto
+        };
+
+        // Llamar al servicio para crear la orden
+        const response = await crearOrdenDinamicaWeb(orden);
+        
+        // Redirigir al usuario a la URL de Mercado Pago
+        window.location.href = response.url;
+      } catch (error) {
+        console.error('Error al procesar la compra:', error);
+        alert('Hubo un problema al procesar la compra. Por favor, inténtalo nuevamente.');
+      }
+    } else {
+      alert('Por favor, seleccione un plan antes de continuar.');
     }
   };
 
@@ -80,7 +99,7 @@ const DetalleProducto = () => {
               <option value="">Seleccione un plan</option>
               {planes.map((plan) => (
                 <option key={plan.id} value={plan.id}>
-                  {plan.titulo}
+                  {plan.nombre}
                 </option>
               ))}
             </select>

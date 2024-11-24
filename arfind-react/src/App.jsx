@@ -15,6 +15,7 @@ import Contact from './Pages/Contact/Contact';
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import './styles/App.css';
+import PagoStatus from './Pages/PasarelaProductos/PagoStatus/PagoStatus';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -57,10 +58,11 @@ function App() {
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/producto/:id" element={<DetalleProducto />} /> {/* Ruta dinámica para el detalle del producto */}
-          <Route path="/mapa" element={isLoggedIn ? <PanelMapa /> : <Navigate to="/login" />} />
+          <Route path="/mapa" element={isLoggedIn ? <PanelMapa /> : <PanelMapa />} />
           <Route path="/register" element={!isLoggedIn ? <Register /> : <Navigate to="/" />} />
           <Route path="/login" element={!isLoggedIn ? <Login onLogin={handleLogin} /> : <Navigate to="/" />} />
           <Route path="/account-settings" element={isLoggedIn ? <AccountSettingsPage /> : <Navigate to="/login" />} />
+          <Route path="/pago" element={<PagoStatus />} />
         </Routes>
       </div>
       <Footer />

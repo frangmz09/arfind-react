@@ -14,11 +14,14 @@ const DispositivoCard = ({
   isOwnDevice,
   codigoInvitado,
   onGenerateCodigo,
+  onEditName, // Callback para manejar la edición del nombre
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showToast, setShowToast] = useState(false); // Estado para controlar el toast
+  const [isEditing, setIsEditing] = useState(false); // Estado para controlar si se está editando
+  const [newName, setNewName] = useState(title); // Nuevo nombre del dispositivo
 
-  const copyToClipboard = () => {
+  const handleCopyToClipboard = () => {
     if (codigoInvitado) {
       navigator.clipboard.writeText(codigoInvitado).then(
         () => {
@@ -31,11 +34,50 @@ const DispositivoCard = ({
     }
   };
 
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing); // Alternar entre edición y vista normal
+    setNewName(title); // Restablecer el nombre si se cancela la edición
+  };
+
+  const handleSaveEdit = () => {
+    if (newName.trim() !== '') {
+      onEditName(newName); // Llamar al callback con el nuevo nombre
+      setIsEditing(false); // Salir del modo de edición
+    }
+  };
+
   return (
     <div className={`card ${isOwnDevice ? '' : 'invited-card'}`}>
       <div className="card-header">
         <div className="card-title-container">
-          <h2 className="card-title">{title}</h2>
+          {isEditing ? (
+            <div className="edit-input-container">
+              <input
+                type="text"
+                className="edit-input"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+              />
+              <button className="save-edit-button" onClick={handleSaveEdit}>
+                ✓
+              </button>
+              <button className="cancel-button" onClick={handleEditToggle}>
+                ×
+              </button>
+            </div>
+          ) : (
+            <>
+              <h2 className="card-title">{title}</h2>
+              {isOwnDevice && (
+                <img
+                  src={editIcon}
+                  alt="Editar nombre"
+                  className="edit-icon"
+                  onClick={handleEditToggle}
+                />
+              )}
+            </>
+          )}
         </div>
         {isOwnDevice && (
           <img
@@ -77,7 +119,7 @@ const DispositivoCard = ({
                   src={copyIcon}
                   alt="Copiar"
                   className="copy-icon"
-                  onClick={copyToClipboard}
+                  onClick={handleCopyToClipboard}
                 />
               )}
             </div>

@@ -309,3 +309,44 @@
     }
   }
   
+  .edit-input-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .edit-input {
+    flex: 1;
+    padding: 5px;
+    border: 2px solid #0486FF;
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+  }
+  
+  .save-edit-button {
+    background-color: #4CAF50; /* Verde para el botón de guardar */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  .save-edit-button:hover {
+    background-color: #45a049; /* Hover verde más oscuro */
+  }
+  
+  .cancel-button {
+    background-color: #f44336; /* Rojo para el botón de cancelar */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel-button:hover {
+    background-color: #e03126; /* Hover rojo más oscuro */
+  }
+  
