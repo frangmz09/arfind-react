@@ -30,6 +30,17 @@ const Home = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [generateCodeDevice, setGenerateCodeDevice] = useState(null);
 
+  useEffect(() => {
+    let timer;
+    if (showToast) {
+      // Oculta el Toast después de 3 segundos
+      timer = setTimeout(() => {
+        setShowToast(false); // Cambia el estado para ocultar el Toast
+      }, 3000);
+    }
+    return () => clearTimeout(timer); // Limpia el temporizador al desmontar o si cambia el estado
+  }, [showToast]);
+  
   const fetchProducts = async () => {
     try {
       const productsResponse = await getProductos();
@@ -58,11 +69,16 @@ const Home = () => {
     try {
       const token = localStorage.getItem('userToken');
       const response = await generateCodigoInvitado(deviceId, token);
+  
       setOwnDevices((prevDevices) =>
         prevDevices.map((device) =>
           device.id === deviceId ? { ...device, codigo_invitado: response.codigo_invitado } : device
         )
       );
+  
+      // Establece el dispositivo y su código en el estado
+      setGenerateCodeDevice({ id: deviceId, codigo_invitado: response.codigo_invitado });
+  
       setToastMessage('¡Código generado con éxito!');
       setShowToast(true);
     } catch (error) {
@@ -171,17 +187,17 @@ const Home = () => {
         )}
 
         {generateCodeDevice && (
-          <GenerateCodeModal
-            codigoInvitado={generateCodeDevice.codigo_invitado}
-            onGenerateCodigo={() => handleGenerateCodigo(generateCodeDevice.id)}
-            onCopyToClipboard={() => {
-              navigator.clipboard.writeText(generateCodeDevice.codigo_invitado || '');
-              setToastMessage('¡Código copiado al portapapeles!');
-              setShowToast(true);
-            }}
-            onClose={() => setGenerateCodeDevice(null)}
-          />
-        )}
+              <GenerateCodeModal
+                codigoInvitado={generateCodeDevice.codigo_invitado}
+                onGenerateCodigo={() => handleGenerateCodigo(generateCodeDevice.id)}
+                onCopyToClipboard={() => {
+                  navigator.clipboard.writeText(generateCodeDevice.codigo_invitado || '');
+                  setToastMessage('¡Código copiado al portapapeles!');
+                  setShowToast(true);
+                }}
+                onClose={() => setGenerateCodeDevice(null)} // Cierra el modal
+              />
+            )}
 
         {invitedDevices.length > 0 && (
           <>
