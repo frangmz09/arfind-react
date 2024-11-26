@@ -1,0 +1,31 @@
+.toast {
+    position: fixed;
+    bottom: 30%; /* Altura relativa al viewport */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0486FF; /* Color de fondo principal */
+    color: white; /* Color del texto */
+    padding: 10px 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 1rem; /* Tamaño de fuente */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+    z-index: 1500; /* Aparece encima de otros elementos */
+    animation: fadeInOut 2s ease-in-out; /* Animación de aparición y desaparición */
+  }
+  
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px); /* Aparece desde abajo */
+    }
+    10%,
+    90% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0); /* Totalmente visible */
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px); /* Desaparece hacia abajo */
+    }
+  }
+  

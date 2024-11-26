@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import './Home.css';
+import styles from './Home.module.css';
 import Logo from '../../Componentes/Logo/Logo';
 import BtnAux from '../../Componentes/BtnAux/BtnAux';
 import DispositivoCard from '../../Componentes/DispositivoCard/DispositivoCard';
 import PasarelaProductos from '../../Componentes/PasarelaProductos/PasarelaProductos';
 import LoadingScreen from '../../Componentes/LoadingScreen/LoadingScreen';
-import { 
-  getDispositivosByUsuario, 
-  getDispositivosInvitados, 
-  generateCodigoInvitado, 
-  updateApodoDispositivo, 
-  submitCodigoInvitado 
+import Toast from '../../Componentes/Toast/Toast';
+import GenerateCodeModal from '../../Componentes/Modals/GenerateCodeModal/GenerateCodeModal';
+import AddInvitedDeviceModal from '../../Componentes/Modals/AddInvitedDeviceModal/AddInvitedDeviceModal';
+
+import {
+  getDispositivosByUsuario,
+  getDispositivosInvitados,
+  generateCodigoInvitado,
+  updateApodoDispositivo,
+  submitCodigoInvitado,
 } from '../../services/dipositivosService';
 import { getProductos } from '../../services/productosService';
 
@@ -21,7 +25,10 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [codigoInvitado, setCodigoInvitado] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controla el estado del modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [generateCodeDevice, setGenerateCodeDevice] = useState(null);
 
   const fetchProducts = async () => {
     try {
@@ -56,6 +63,8 @@ const Home = () => {
           device.id === deviceId ? { ...device, codigo_invitado: response.codigo_invitado } : device
         )
       );
+      setToastMessage('¡Código generado con éxito!');
+      setShowToast(true);
     } catch (error) {
       console.error('Error generando código de invitado:', error);
       setError('No se pudo generar el código. Intenta nuevamente.');
@@ -71,6 +80,8 @@ const Home = () => {
           device.id === deviceId ? { ...device, apodo: newName } : device
         )
       );
+      setToastMessage('¡Nombre actualizado!');
+      setShowToast(true);
     } catch (error) {
       console.error('Error actualizando el apodo:', error);
       setError('No se pudo actualizar el nombre. Intenta nuevamente.');
@@ -82,8 +93,8 @@ const Home = () => {
       const token = localStorage.getItem('userToken');
       await submitCodigoInvitado(codigoInvitado, token);
       setCodigoInvitado('');
-      setIsModalOpen(false); // Cierra el modal
-      fetchDevices(token); // Actualizar lista de dispositivos
+      setIsModalOpen(false);
+      fetchDevices(token);
     } catch (error) {
       console.error('Error agregando dispositivo invitado:', error);
       setError('No se pudo agregar el dispositivo. Intenta nuevamente.');
@@ -113,82 +124,79 @@ const Home = () => {
   }
 
   return (
-    <div className="home-page">
-      <div className="home-logo">
+    <div className={styles.homePage}>
+      <div className={styles.homeLogo}>
         <Logo type="logo" altText="Logo" size="13rem" />
       </div>
-      <div className="home-content">
-        {error && <p className="error-message">{error}</p>}
+      <div className={styles.homeContent}>
+        {error && <p className={styles.errorMessage}>{error}</p>}
 
-        <h1 className="home-title">Tus Dispositivos Propios</h1>
-        <div className="home-cards">
+        <h1 className={styles.homeTitle}>Tus Dispositivos Propios</h1>
+        <div className={styles.homeCards}>
           {ownDevices.length === 0 ? (
             <p>No tienes dispositivos propios registrados.</p>
           ) : (
-            ownDevices.map((device, index) => (
+            ownDevices.map((device) => (
               <DispositivoCard
-                key={index}
+                key={device.id}
                 title={device.apodo || 'Sin apodo'}
                 lastUpdate={
                   device.ult_actualizacion
                     ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
                     : 'Sin actualizaciones'
                 }
-                updateRate={'15 minutos'}
+                updateRate="15 minutos"
                 battery={`${device.bateria?.toFixed(0) || 0}%`}
                 imageSrc={`https://via.placeholder.com/150`}
                 isOwnDevice={true}
                 codigoInvitado={device.codigo_invitado}
-                onGenerateCodigo={() => handleGenerateCodigo(device.id)}
+                onGenerateCodigo={() => setGenerateCodeDevice(device)}
                 onEditName={(newName) => handleEditName(device.id, newName)}
               />
             ))
           )}
         </div>
 
-        <div className="add-invite-button">
-          <button onClick={() => setIsModalOpen(true)} className="add-invite-btn">
-            Agregar dispositivo Invitado
-          </button>
-        </div>
+        <button onClick={() => setIsModalOpen(true)} className={styles.panelBtn}>
+          Agregar dispositivo Invitado
+        </button>
 
         {isModalOpen && (
-          <div className="modal">
-            <div className="modal-content">
-              <button className="modal-close" onClick={() => setIsModalOpen(false)}>×</button>
-              <p className='add-dispo-inv-title'>Agregar Dispositivo Invitado</p>
-              <input
-                type="text"
-                value={codigoInvitado}
-                onChange={(e) => setCodigoInvitado(e.target.value)}
-                placeholder="Código de Invitado"
-                className="input-invite"
-              />
-              <button
-                className="add-invite-btn-modal"
-                onClick={handleAddInvitedDevice}
-                disabled={!codigoInvitado.trim()}
-              >
-                Agregar
-              </button>
-            </div>
-          </div>
+          <AddInvitedDeviceModal
+            codigoInvitado={codigoInvitado}
+            setCodigoInvitado={setCodigoInvitado}
+            onClose={() => setIsModalOpen(false)}
+            onSubmit={handleAddInvitedDevice}
+          />
+        )}
+
+        {generateCodeDevice && (
+          <GenerateCodeModal
+            codigoInvitado={generateCodeDevice.codigo_invitado}
+            onGenerateCodigo={() => handleGenerateCodigo(generateCodeDevice.id)}
+            onCopyToClipboard={() => {
+              navigator.clipboard.writeText(generateCodeDevice.codigo_invitado || '');
+              setToastMessage('¡Código copiado al portapapeles!');
+              setShowToast(true);
+            }}
+            onClose={() => setGenerateCodeDevice(null)}
+          />
         )}
 
         {invitedDevices.length > 0 && (
           <>
-            <h1 className="home-title">Dispositivos Invitados</h1>
-            <div className="home-cards">
-              {invitedDevices.map((device, index) => (
+            <h1 className={styles.homeTitle}>Dispositivos Invitados</h1>
+            <div className={styles.homeCards}>
+              {invitedDevices.map((device) => (
                 <DispositivoCard
-                  key={index}
+                  key={device.id}
                   title={device.apodo || 'Sin apodo'}
                   lastUpdate={
                     device.ult_actualizacion
                       ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
                       : 'Sin actualizaciones'
                   }
-                  updateRate={'15 minutos'}
+                  updateRate="15 minutos"
                   battery={`${device.bateria?.toFixed(0) || 0}%`}
                   imageSrc={`https://via.placeholder.com/150`}
                   isOwnDevice={false}
@@ -197,25 +205,27 @@ const Home = () => {
             </div>
           </>
         )}
-        {ownDevices.length > 0 && (
-          <div className="extraButtons">
-            <a href="/mapa" className="visualizar-ubicacion-btn">
-              Visualizar ubicación de todos los dispositivos
-            </a>
-          </div>
+
+        {showToast && <Toast message={toastMessage} />}
+      </div>
+      {ownDevices.length > 0 && (
+        <div className={styles.extraButtons}>
+          <a href="/mapa" className={styles.panelBtn}>
+            Visualizar ubicación de todos los dispositivos
+          </a>
+        </div>
+      )}
+      <div className={styles.pasarelaHome}>
+        <h2 className={styles.homeTitle}>Realiza el pedido de tu próximo dispositivo</h2>
+        {products.length === 0 ? (
+          <p>No hay productos disponibles.</p>
+        ) : (
+          <PasarelaProductos products={products} height="150px" />
         )}
-        <div className="pasarela-home">
-          <h2 className="home-title">Realiza el pedido de tu próximo dispositivo</h2>
-          {products.length === 0 ? (
-            <p>No hay productos disponibles.</p>
-          ) : (
-            <PasarelaProductos products={products} height="150px" />
-          )}
-        </div>
-        <div className="home-buttons">
-          <BtnAux image="/images/settings.png" altText="Configuración" link="/" />
-          <BtnAux image="/images/support.png" altText="Soporte" link="/support" />
-        </div>
+      </div>
+      <div className={styles.homeButtons}>
+        <BtnAux image="/images/settings.png" altText="Configuración" link="/" />
+        <BtnAux image="/images/support.png" altText="Soporte" link="/support" />
       </div>
     </div>
   );

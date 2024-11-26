@@ -1,0 +1,122 @@
+/* Estructura general */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  }
+  
+  .modal-content {
+    width: 60%;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .modal-body {
+    display: flex;
+  }
+  
+  /* Panel izquierdo */
+  .left-panel {
+    width: 35%;
+    background: #f9f9f9;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+  }
+  
+  .left-panel h3 {
+    font-size: 1rem;
+    color: black;
+    margin-bottom: 10px;
+  }
+  
+  .left-panel button {
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    border: none;
+    background: none;
+    font-size: 0.9rem;
+    color: gray;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .left-panel button:hover {
+    color: black;
+  }
+  
+  .left-panel .danger-button {
+    color: red;
+  }
+  
+  .left-panel .danger-button:hover {
+    font-weight: bold;
+  }
+  
+  /* Panel derecho */
+  .right-panel {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .right-content h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .right-content .input,
+  .right-content .select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .right-content .save-button {
+    padding: 10px 15px;
+    background: #0486ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .right-content .save-button:hover {
+    background: #036dd3;
+  }
+  
+  .right-content .delete-button {
+    padding: 10px 15px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .right-content .delete-button:hover {
+    background: darkred;
+  }
+  

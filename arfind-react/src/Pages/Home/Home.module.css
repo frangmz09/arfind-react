@@ -1,11 +1,90 @@
-
-.home {
-  text-align: center;
-  padding: 20px;
+/* Estilos generales de la página principal */
+.homePage {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative; /* Necesario para el posicionamiento de los botones */
+  margin-bottom: 3rem;
 }
 
-.home__title {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 20px;
+.homeLogo {
+  margin-bottom: 1.5rem;
+}
+
+.homeContent {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Permite que crezca dentro del contenedor */
+  width: 100%;
+  overflow: hidden; /* Evita que el contenido se desborde */
+  align-items: center; /* Centra los elementos horizontalmente */
+}
+
+.homeCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Espaciado entre tarjetas */
+  justify-content: space-evenly;
+  width: 100%;
+  flex-grow: 1; /* Permite que las tarjetas ocupen todo el espacio */
+}
+
+.panelBtn {
+  display: inline-block;
+  padding: 0.7rem;
+  background-color: #0486FF; /* Fondo del botón */
+  color: #FFF; /* Color del texto */
+  border: none;
+  border-radius: 8px; /* Bordes redondeados */
+  text-decoration: none; /* Sin subrayado */
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves */
+  margin: 0.75rem;
+  cursor: pointer;
+}
+
+.panelBtn:hover {
+  background-color: #0369d9; /* Fondo al pasar el mouse */
+  transform: scale(1.05); /* Efecto de escala al hover */
+}
+
+.homeButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 0.5rem;
+  justify-content: center; /* Centra los botones */
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.homeButtons img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.pasarelaHome {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+
+.extraButtons {
+  margin-top: 3rem;
+}
+
+.homeTitle {
+  margin: 2rem;
+  text-align: center;
+}
+
+.errorMessage {
+  color: #f44336; /* Rojo */
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
 }

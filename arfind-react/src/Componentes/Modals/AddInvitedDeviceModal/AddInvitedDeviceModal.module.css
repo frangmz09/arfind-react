@@ -1,0 +1,35 @@
+.add-dispo-inv-title {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.input-invite {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.add-invite-btn-modal {
+  background-color: #0486FF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.add-invite-btn-modal:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.add-invite-btn-modal:hover:not(:disabled) {
+  background-color: #036dc9;
+}

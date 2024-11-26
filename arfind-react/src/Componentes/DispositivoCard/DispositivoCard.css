@@ -51,19 +51,27 @@
 }
 
 .edit-icon {
-    margin-left: 10px; 
-    height: 1rem; 
-    width: auto; 
-    cursor: pointer;
+  margin-left: 10px;
+  height: 1rem;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.edit-icon:hover {
+  transform: scale(1.1); /* Animación de agrandamiento */
 }
 
 .settings-icon {
-    position: absolute;
-    right: 2.5rem;
-    top: 0.90rem;
-    height: 1rem;
-    width: auto; 
-    cursor: pointer;
+  position: absolute;
+  right: 2.5rem;
+  top: 0.90rem;
+  height: 1rem;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.settings-icon:hover {
+  transform: scale(1.1); /* Animación de agrandamiento */
 }
 
 .card-content {
@@ -180,13 +188,13 @@
   }
   .add-icon {
     position: absolute;
-    right: 4.5rem; /* Ajustar la posición respecto al ícono de configuración */
-    top: 0.90rem; /* Alinear verticalmente con el ícono de configuración */
+    right: 4.5rem;
+    top: 0.90rem;
     height: 1rem;
     width: auto;
     cursor: pointer;
     transition: transform 0.2s ease;
-}
+  }
 
 .add-icon:hover {
     transform: scale(1.1); /* Animación de agrandamiento en hover */
@@ -212,8 +220,9 @@
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    width: 300px;
+    width: fit-content;
     position: relative;
+    
   }
   
   .modal-close {
@@ -249,6 +258,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    width: 100%;
   }
   
   .copy-icon {
@@ -271,6 +281,7 @@
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    font-size: 0.8rem;
   }
   
   .generate-button:hover {
@@ -349,4 +360,148 @@
   .cancel-button:hover {
     background-color: #e03126; /* Hover rojo más oscuro */
   }
+  .modal-action-btn {
+    background-color: #0486FF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
   
+  .modal-action-btn:hover {
+    background-color: #036dc9;
+  }
+  
+  .invited-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  
+  .invited-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .remove-invited-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .remove-invited-btn:hover {
+    background-color: #d32f2f;
+  }
+  .modal-title{
+    margin: 1.5rem;
+    font-size: 1.25rem;
+    color: #333;
+  }
+  /* MODAL CONFIGURACIÓN */
+.modal-body {
+  display: flex;
+  flex-direction: row;
+  width: 800px;
+  max-width: 90%;
+}
+
+.left-panel {
+  width: 35%;
+  border-right: 1px solid #ddd;
+  padding: 15px;
+}
+
+.left-panel h3 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #333;
+  text-align: left;
+}
+
+.left-panel button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  background-color: transparent;
+  text-align: left;
+  font-size: 0.9rem;
+  color: #555;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.left-panel button:hover {
+  background-color: #eee;
+  color: #000;
+}
+
+.left-panel .danger-button {
+  color: red;
+  font-weight: bold;
+}
+
+.right-panel {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.right-panel h2 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.right-panel .input,
+.right-panel .select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.right-panel .save-button,
+.right-panel .delete-button {
+  background-color: #0486FF;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 60%;
+  margin: 2rem auto;
+  font-weight: bolder;
+}
+
+.right-panel .save-button:hover,
+.right-panel .delete-button:hover {
+  background-color: #036dc9;
+}
+
+.right-panel .delete-button {
+  background-color: #f44336;
+}
+
+.right-panel .delete-button:hover {
+  background-color: #d32f2f;
+}

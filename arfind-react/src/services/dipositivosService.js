@@ -1,5 +1,6 @@
 import { apiFetch } from './api';
 
+// Generar un código de invitado
 export const generateCodigoInvitado = async (deviceId, token) => {
   try {
     const response = await apiFetch('/dispositivos/generateCodigoInvitado', {
@@ -17,6 +18,7 @@ export const generateCodigoInvitado = async (deviceId, token) => {
   }
 };
 
+// Obtener dispositivos del usuario autenticado
 export const getDispositivosByUsuario = async (token) => {
   try {
     const response = await apiFetch('/dispositivos/getDispositivosByUsuario', {
@@ -31,6 +33,7 @@ export const getDispositivosByUsuario = async (token) => {
   }
 };
 
+// Obtener dispositivos donde el usuario es invitado
 export const getDispositivosInvitados = async (token) => {
   try {
     const response = await apiFetch('/dispositivos/getDispositivosInvitados', {
@@ -61,9 +64,9 @@ export const updateApodoDispositivo = async (deviceId, apodo, token) => {
     console.error('Error updating apodo del dispositivo:', error);
     throw error;
   }
-  
 };
 
+// Enviar código de invitado
 export const submitCodigoInvitado = async (codigoInvitado, token) => {
   try {
     const response = await apiFetch('/dispositivos/submitCodigoInvitado', {
@@ -77,6 +80,24 @@ export const submitCodigoInvitado = async (codigoInvitado, token) => {
     return response;
   } catch (error) {
     console.error('Error submitting codigo invitado:', error);
+    throw error;
+  }
+};
+
+// Configurar dispositivo (darse de baja, eliminar invitados, cambiar plan)
+export const configureDispositivo = async (deviceId, action, updates, token) => {
+  try {
+    const response = await apiFetch('/dispositivos/configureDispositivo', {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ deviceId, action, updates }),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error configuring dispositivo:', error);
     throw error;
   }
 };
