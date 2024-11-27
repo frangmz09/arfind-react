@@ -229,12 +229,16 @@ const Home = () => {
         {/* Modal de configuración */}
         {settingsDevice && (
           <SettingsModal
-            onClose={handleCloseSettingsModal}
-            onEditName={(newName) => handleEditName(settingsDevice, newName)}
-            onManageInvites={() => console.log('Gestionar invitados')} // Define esta función según sea necesario
-            onChangePlan={() => console.log('Cambiar plan')} // Define esta función según sea necesario
-            onUnsubscribe={() => console.log('Darse de baja')} // Define esta función según sea necesario
-          />
+          onClose={handleCloseSettingsModal}
+          onEditName={(newName) => handleEditName(settingsDevice, newName)} // Vincula a la función para editar
+          onGenerateCode={() => handleGenerateCodigo(settingsDevice)} // Vincula a la función para generar el código
+          onManageInvites={() => console.log('Gestionar invitados')} // Placeholder: personaliza según tus necesidades
+          onChangePlan={() => console.log('Cambiar plan')} // Placeholder: personaliza según tus necesidades
+          onUnsubscribe={() => console.log('Darse de baja')} // Placeholder: personaliza según tus necesidades
+          codigoInvitado={ownDevices.find((device) => device.id === settingsDevice)?.codigo_invitado || null}
+          apodoActual={ownDevices.find((device) => device.id === settingsDevice)?.apodo || ''}
+        />
+
         )}
         {invitedDevices.length > 0 && (
           <>

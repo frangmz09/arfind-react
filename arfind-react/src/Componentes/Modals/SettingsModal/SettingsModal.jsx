@@ -7,10 +7,28 @@ const SettingsModal = ({
   onManageInvites,
   onChangePlan,
   onUnsubscribe,
-  onGenerateCode, // Agregado para generar el código
-  codigoInvitado, // Código de invitado actual
+  onGenerateCode, // Para generar el código
+  codigoInvitado: initialCodigo, // Código de invitado inicial
+  apodoActual, // Apodo actual del dispositivo
 }) => {
-  const [activeTab, setActiveTab] = useState(null); // Controla qué contenido mostrar en el panel derecho
+  const [activeTab, setActiveTab] = useState(null); // Controla el contenido del panel derecho
+  const [newName, setNewName] = useState(apodoActual || ''); // Controla el apodo editable
+  const [codigoInvitado, setCodigoInvitado] = useState(initialCodigo || null); // Controla el código de invitado
+
+  const handleSaveEditName = () => {
+    if (newName.trim() !== '') {
+      onEditName(newName); // Llama a la función para guardar cambios
+    }
+  };
+
+  const handleGenerateCodigo = async () => {
+    try {
+      const nuevoCodigo = await onGenerateCode(); // Llama a la función para generar el código
+      setCodigoInvitado(nuevoCodigo); // Actualiza el estado local
+    } catch (error) {
+      console.error('Error generando código:', error);
+    }
+  };
 
   const renderRightContent = () => {
     switch (activeTab) {
@@ -21,23 +39,16 @@ const SettingsModal = ({
             <input
               type="text"
               placeholder="Nuevo apodo"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
               className={styles.input}
-              onChange={(e) => onEditName(e.target.value)}
             />
-            <button className={styles.saveButton}>Guardar</button>
-          </div>
-        );
-      case 'manageInvites':
-        return (
-          <div className={styles.rightPanel}>
-            <h2>Gestión de Invitados</h2>
-            <p>Aquí aparecerán los invitados asociados al dispositivo.</p>
-            <button className={styles.saveButton} onClick={onManageInvites}>
-              Gestionar Invitados
+            <button onClick={handleSaveEditName} className={styles.saveButton}>
+              Guardar
             </button>
           </div>
         );
-      case 'generateCode': // Nueva opción: Generar Código de Invitado
+      case 'generateCode':
         return (
           <div className={styles.rightPanel}>
             <h2>Generar Código de Invitado</h2>
@@ -57,8 +68,18 @@ const SettingsModal = ({
                 />
               )}
             </div>
-            <button className={styles.generateButton} onClick={onGenerateCode}>
+            <button onClick={handleGenerateCodigo} className={styles.saveButton}>
               Generar Código
+            </button>
+          </div>
+        );
+      case 'manageInvites':
+        return (
+          <div className={styles.rightPanel}>
+            <h2>Gestión de Invitados</h2>
+            <p>Aquí aparecerán los invitados asociados al dispositivo.</p>
+            <button className={styles.saveButton} onClick={onManageInvites}>
+              Gestionar Invitados
             </button>
           </div>
         );
@@ -105,9 +126,9 @@ const SettingsModal = ({
           <div className={styles.leftPanel}>
             <h3>Configuración del dispositivo</h3>
             <button onClick={() => setActiveTab('editNickname')}>Editar Apodo</button>
+            <button onClick={() => setActiveTab('generateCode')}>Código de Invitado</button>
             <h3>Invitados</h3>
             <button onClick={() => setActiveTab('manageInvites')}>Gestión de Invitados</button>
-            <button onClick={() => setActiveTab('generateCode')}>Generar Código de Invitado</button>
             <h3>Plan de uso</h3>
             <button onClick={() => setActiveTab('changePlan')}>Cambiar Plan</button>
             <button

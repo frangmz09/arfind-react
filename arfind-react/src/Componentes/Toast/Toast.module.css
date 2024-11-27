@@ -9,7 +9,7 @@
     border-radius: 8px; /* Bordes redondeados */
     font-size: 1rem; /* Tamaño de fuente */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
-    z-index: 1500; /* Aparece encima de otros elementos */
+    z-index: 900000; /* Aparece encima de otros elementos */
     animation: fadeInOut 3.1s ease-in-out; /* Animación de aparición y desaparición */
   }
   

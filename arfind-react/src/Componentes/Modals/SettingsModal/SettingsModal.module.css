@@ -101,6 +101,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+    width: 100%;
   }
   
   .rightPanel h2 {
@@ -110,11 +111,10 @@
   
   .input,
   .select {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    margin-bottom: 15px;
     font-size: 1rem;
   }
   
@@ -128,8 +128,8 @@
     cursor: pointer;
     transition: background-color 0.3s;
     width: 60%;
-    margin: 2rem auto;
     font-weight: bold;
+    margin-top: 1rem;
   }
   
   .saveButton:hover {
@@ -148,6 +148,7 @@
     align-items: center;
     gap: 10px;
     margin-top: 15px;
+    width: 100%;
   }
   
   .generatedCode {
@@ -158,7 +159,7 @@
     border-radius: 5px;
     border: 1px solid #ddd;
     text-align: center;
-    width: 100%;
+    width: fit-content;
     max-width: 300px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -186,9 +187,28 @@
     cursor: pointer;
     margin-top: 15px;
     transition: background-color 0.3s ease;
+    width: 100%;
   }
   
   .generateButton:hover {
     background-color: #036dc9;
+  }
+  
+  .planDetails {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .planDetails h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .planDetails p {
+    margin: 5px 0;
+    font-size: 0.9rem;
   }
   
