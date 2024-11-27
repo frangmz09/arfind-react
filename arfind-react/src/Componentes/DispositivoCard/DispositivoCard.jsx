@@ -12,11 +12,13 @@ const DispositivoCard = ({
   imageSrc,
   isOwnDevice,
   codigoInvitado,
-  onGenerateCodigo, // Recibe la función desde Home
+  onGenerateCodigo,
   onEditName,
-  onOpenSettingsModal, // Nueva prop para abrir el modal
+  onOpenSettingsModal,
+  onOpenGenerateCodeModal, // Aquí se pasa
   deviceId,
 }) => {
+
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState(title);
 
@@ -71,11 +73,9 @@ const DispositivoCard = ({
               src={addIcon}
               alt="Generar código"
               className={styles.addIcon}
-              onClick={() => onGenerateCodigo(deviceId)} // Pasa una función anónima que llama a la función
+              onClick={() => onOpenGenerateCodeModal(deviceId)} 
               title="Generar Código de Invitado"
             />
-
-
             <img
               src={settingsIcon}
               alt="Configuración"

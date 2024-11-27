@@ -43,6 +43,8 @@ const Home = () => {
     }
     return () => clearTimeout(timer); // Limpia el temporizador al desmontar o si cambia el estado
   }, [showToast]);
+
+ 
   
   const handleOpenSettingsModal = (deviceId) => {
     setSettingsDevice(deviceId); // Establece el dispositivo para el modal
@@ -76,26 +78,43 @@ const Home = () => {
     }
   };
 
-  const handleGenerateCodigo = async (deviceId) => {
-    try {
-      const token = localStorage.getItem('userToken');
-      const response = await generateCodigoInvitado(deviceId, token);
+  const handleOpenGenerateCodeModal = (deviceId) => {
+    // Busca el dispositivo por ID
+    const device = ownDevices.find((device) => device.id === deviceId);
   
-      setOwnDevices((prevDevices) =>
-        prevDevices.map((device) =>
-          device.id === deviceId ? { ...device, codigo_invitado: response.codigo_invitado } : device
-        )
-      );
-  
-      // Establece el dispositivo y su código en el estado
-      setGenerateCodeDevice({ id: deviceId, codigo_invitado: response.codigo_invitado });
-  
-      setToastMessage('¡Código generado con éxito!');
-      setShowToast(true);
-    } catch (error) {
-      console.error('Error generando código de invitado:', error);
-      setError('No se pudo generar el código. Intenta nuevamente.');
+    // Si ya tiene un código, se pasa directamente al modal
+    if (device && device.codigo_invitado) {
+      setGenerateCodeDevice({ id: deviceId, codigo_invitado: device.codigo_invitado });
+    } else {
+      // Si no tiene código, inicializamos el modal con código vacío
+      setGenerateCodeDevice({ id: deviceId, codigo_invitado: null });
     }
+  };
+  
+  const handleGenerateCodigo = async () => {
+  try {
+    const token = localStorage.getItem('userToken');
+    const response = await generateCodigoInvitado(generateCodeDevice.id, token);
+
+    setOwnDevices((prevDevices) =>
+      prevDevices.map((device) =>
+        device.id === generateCodeDevice.id
+          ? { ...device, codigo_invitado: response.codigo_invitado }
+          : device
+      )
+    );
+
+    setGenerateCodeDevice((prev) => ({
+      ...prev,
+      codigo_invitado: response.codigo_invitado,
+    }));
+
+    setToastMessage('¡Código generado con éxito!');
+    setShowToast(true);
+  } catch (error) {
+    console.error('Error generando código de invitado:', error);
+    setError('No se pudo generar el código. Intenta nuevamente.');
+  }
   };
 
   const handleEditName = async (deviceId, newName) => {
@@ -165,18 +184,19 @@ const Home = () => {
           ) : (
             ownDevices.map((device) => (
               <DispositivoCard
-                key={device.id}
-                title={device.apodo || 'Sin apodo'}
-                lastUpdate={new Date(device.ult_actualizacion?._seconds * 1000).toLocaleString() || 'Sin actualizaciones'}
-                updateRate="15 minutos"
-                battery={`${device.bateria?.toFixed(0) || 0}%`}
-                imageSrc={`https://via.placeholder.com/150`}
-                isOwnDevice={true}
-                onGenerateCodigo={() => handleGenerateCodigo(device.id)}
-                onEditName={(newName) => handleEditName(device.id, newName)}
-                onOpenSettingsModal={handleOpenSettingsModal} // Pasa la función para abrir el modal
-                deviceId={device.id}
-              />
+              key={device.id}
+              title={device.apodo || 'Sin apodo'}
+              lastUpdate={new Date(device.ult_actualizacion?._seconds * 1000).toLocaleString() || 'Sin actualizaciones'}
+              updateRate="15 minutos"
+              battery={`${device.bateria?.toFixed(0) || 0}%`}
+              imageSrc={`https://via.placeholder.com/150`}
+              isOwnDevice={true}
+              onGenerateCodigo={handleGenerateCodigo} // Para generar el código cuando el usuario haga clic
+              onEditName={(newName) => handleEditName(device.id, newName)}
+              onOpenSettingsModal={handleOpenSettingsModal} // Configuración modal
+              onOpenGenerateCodeModal={handleOpenGenerateCodeModal} // Asegúrate de pasar esta función
+              deviceId={device.id}
+            />
             ))
           )}
         </div>

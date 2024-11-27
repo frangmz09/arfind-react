@@ -18,7 +18,7 @@ const GenerateCodeModal = ({ codigoInvitado, onGenerateCodigo, onCopyToClipboard
           />
           {codigoInvitado && (
             <img
-              src="/images/copy.png" // Ruta del ícono de copiar
+              src="/images/copy.png"
               alt="Copiar"
               className={styles.copyIcon}
               onClick={onCopyToClipboard}
@@ -32,5 +32,6 @@ const GenerateCodeModal = ({ codigoInvitado, onGenerateCodigo, onCopyToClipboard
     </div>
   );
 };
+
 
 export default GenerateCodeModal;
