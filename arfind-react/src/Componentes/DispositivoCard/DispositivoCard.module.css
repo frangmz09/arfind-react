@@ -1,0 +1,249 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  max-height: 210px;
+  border: 3px solid #0486FF; /* Color por defecto para dispositivos propios */
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  transition: border-color 0.3s ease; /* Animación suave en cambio de color */
+  padding: 0.5rem;
+}
+
+.invitedCard {
+  border-color: #FFC107; /* Color amarillo para dispositivos invitados */
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 10px;
+  width: 100%;
+}
+
+.cardTitleContainer {
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer; /* Indica que el título es clickeable */
+}
+
+.cardTitleEditable {
+  background-color: #f0f8ff; /* Cambio de fondo para indicar que está en edición */
+  border: 1px solid #0486FF; /* Borde para resaltar la edición */
+  padding: 5px;
+  border-radius: 5px;
+  color: #0486FF; /* Cambio de color del texto cuando se está editando */
+  outline: none; /* Evita que aparezca un borde de foco predeterminado */
+}
+
+.editIcon {
+  margin-left: 10px;
+  height: 1rem;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.editIcon:hover {
+  transform: scale(1.1); /* Animación de agrandamiento */
+}
+
+.settingsIcon {
+  position: absolute;
+  right: 2.5rem;
+  top: 0.9rem;
+  height: 1rem;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.settingsIcon:hover {
+  transform: scale(1.1); /* Animación de agrandamiento */
+}
+
+.addIcon{
+  position: absolute;
+  right: 4.5rem;
+  top: 0.9rem;
+  height: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.addIcon:hover {
+  transform: scale(1.1); /* Animación de agrandamiento */
+}
+.cardContent {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  flex: 1; /* Permite que el contenido crezca hasta el límite de la tarjeta */
+  overflow: hidden; /* Oculta el contenido que se desborda */
+}
+
+.cardImage {
+  width: 30%;
+  height: auto;
+  object-fit: cover;
+}
+
+.cardText {
+  padding-left: 1rem;
+  text-align: left;
+  flex: 1; /* Permite que el texto se ajuste dentro del espacio disponible */
+}
+
+.cardTextP {
+  line-height: 2;
+  font-size: 0.8rem;
+  text-wrap: nowrap;
+  overflow: hidden; /* Oculta el texto que se desborda */
+  text-overflow: ellipsis; /* Agrega "..." al texto que se desborda */
+}
+
+.viewLocationBtn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #0486FF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.editInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editInput {
+  width: 150px; /* Ajusta el ancho del input */
+  padding: 5px;
+  border: 2px solid #0486FF;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.saveEditButton,
+.cancelButton {
+  background-color: #0486FF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.8rem; /* Ajusta el tamaño del texto */
+}
+
+.saveEditButton:hover,
+.cancelButton:hover {
+  background-color: #0371d1; /* Cambio de color en hover */
+}
+
+.cancelButton {
+  background-color: #FF4444;
+}
+
+.cancelButton:hover {
+  background-color: #e03e3e;
+}
+
+.generateInviteBtn {
+  background-color: #0486FF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.generateInviteBtn:hover {
+  background-color: #036dc9;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: fit-content;
+  position: relative;
+}
+
+.modalClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  background: none;
+}
+
+.toast {
+  position: fixed;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #0486FF;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+  z-index: 1500;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  10%,
+  90% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+}

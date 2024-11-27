@@ -8,6 +8,7 @@ import LoadingScreen from '../../Componentes/LoadingScreen/LoadingScreen';
 import Toast from '../../Componentes/Toast/Toast';
 import GenerateCodeModal from '../../Componentes/Modals/GenerateCodeModal/GenerateCodeModal';
 import AddInvitedDeviceModal from '../../Componentes/Modals/AddInvitedDeviceModal/AddInvitedDeviceModal';
+import SettingsModal from '../../Componentes/Modals/SettingsModal/SettingsModal';
 
 import {
   getDispositivosByUsuario,
@@ -29,6 +30,8 @@ const Home = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [generateCodeDevice, setGenerateCodeDevice] = useState(null);
+  const [settingsDevice, setSettingsDevice] = useState(null); 
+
 
   useEffect(() => {
     let timer;
@@ -41,6 +44,14 @@ const Home = () => {
     return () => clearTimeout(timer); // Limpia el temporizador al desmontar o si cambia el estado
   }, [showToast]);
   
+  const handleOpenSettingsModal = (deviceId) => {
+    setSettingsDevice(deviceId); // Establece el dispositivo para el modal
+  };
+
+  const handleCloseSettingsModal = () => {
+    setSettingsDevice(null); // Cierra el modal
+  };
+
   const fetchProducts = async () => {
     try {
       const productsResponse = await getProductos();
@@ -156,18 +167,15 @@ const Home = () => {
               <DispositivoCard
                 key={device.id}
                 title={device.apodo || 'Sin apodo'}
-                lastUpdate={
-                  device.ult_actualizacion
-                    ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
-                    : 'Sin actualizaciones'
-                }
+                lastUpdate={new Date(device.ult_actualizacion?._seconds * 1000).toLocaleString() || 'Sin actualizaciones'}
                 updateRate="15 minutos"
                 battery={`${device.bateria?.toFixed(0) || 0}%`}
                 imageSrc={`https://via.placeholder.com/150`}
                 isOwnDevice={true}
-                codigoInvitado={device.codigo_invitado}
-                onGenerateCodigo={() => setGenerateCodeDevice(device)}
+                onGenerateCodigo={() => handleGenerateCodigo(device.id)}
                 onEditName={(newName) => handleEditName(device.id, newName)}
+                onOpenSettingsModal={handleOpenSettingsModal} // Pasa la función para abrir el modal
+                deviceId={device.id}
               />
             ))
           )}
@@ -198,7 +206,16 @@ const Home = () => {
                 onClose={() => setGenerateCodeDevice(null)} // Cierra el modal
               />
             )}
-
+        {/* Modal de configuración */}
+        {settingsDevice && (
+          <SettingsModal
+            onClose={handleCloseSettingsModal}
+            onEditName={(newName) => handleEditName(settingsDevice, newName)}
+            onManageInvites={() => console.log('Gestionar invitados')} // Define esta función según sea necesario
+            onChangePlan={() => console.log('Cambiar plan')} // Define esta función según sea necesario
+            onUnsubscribe={() => console.log('Darse de baja')} // Define esta función según sea necesario
+          />
+        )}
         {invitedDevices.length > 0 && (
           <>
             <h1 className={styles.homeTitle}>Dispositivos Invitados</h1>

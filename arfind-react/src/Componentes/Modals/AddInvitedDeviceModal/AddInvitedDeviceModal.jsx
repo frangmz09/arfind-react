@@ -1,28 +1,29 @@
 import React from 'react';
-import './AddInvitedDeviceModal.module.css';
-import '../Modal.css';
+import styles from './AddInvitedDeviceModal.module.css';
 
 const AddInvitedDeviceModal = ({ codigoInvitado, setCodigoInvitado, onClose, onSubmit }) => {
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <button className="modal-close" onClick={onClose}>
+    <div className={styles.modalOverlay}>
+      <div className={styles.modal}>
+        <button className={styles.closeButton} onClick={onClose}>
           ×
         </button>
-        <h2 className="add-dispo-inv-title modal-title" >Agregar Dispositivo Invitado</h2>
-        <input
-          type="text"
-          value={codigoInvitado}
-          onChange={(e) => setCodigoInvitado(e.target.value)}
-          placeholder="Código de Invitado"
-          className="input-invite"
-        />
+        <h2 className={styles.modalTitle}>Agregar Dispositivo Invitado</h2>
+        <div className={styles.codeContainer}>
+          <input
+            type="text"
+            value={codigoInvitado}
+            onChange={(e) => setCodigoInvitado(e.target.value)}
+            placeholder="Código de Invitado"
+            className={styles.inputInvite}
+          />
+        </div>
         <button
-          className="add-invite-btn-modal"
+          className={styles.addInviteButton}
           onClick={onSubmit}
           disabled={!codigoInvitado.trim()}
         >
-          Agregar
+          Agregar Dispositivo
         </button>
       </div>
     </div>

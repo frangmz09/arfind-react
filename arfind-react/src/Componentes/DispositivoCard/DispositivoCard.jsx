@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './DispositivoCard.css';
+import styles from './DispositivoCard.module.css';
 import editIcon from '/images/edit.png';
 import settingsIcon from '/images/settings.png';
 import addIcon from '/images/plus.png';
@@ -14,16 +14,11 @@ const DispositivoCard = ({
   codigoInvitado,
   onGenerateCodigo, // Recibe la función desde Home
   onEditName,
-  invitedUsers = [],
-  onRemoveInvitedUser,
-  onChangePlan,
-  onUnsubscribe,
+  onOpenSettingsModal, // Nueva prop para abrir el modal
   deviceId,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [newName, setNewName] = useState(title);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState('basic');
+  const [newName, setNewName] = useState(title);
 
   const handleSaveEdit = () => {
     if (newName.trim() !== '') {
@@ -31,65 +26,25 @@ const DispositivoCard = ({
       setIsEditingName(false);
     }
   };
-  
-  const renderRightContent = () => {
-    switch (selectedOption) {
-      case 'editNickname':
-        return (
-          <div className="right-panel">
-            <h2>Editar Apodo</h2>
-            <input
-              type="text"
-              className="input"
-              placeholder="Nuevo apodo"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-            <button className="save-button" onClick={handleSaveEdit}>
-              Guardar
-            </button>
-          </div>
-        );
-      case 'changePlan':
-        return (
-          <div className="right-panel">
-            <h2>Cambiar Plan</h2>
-            <select
-              onChange={(e) => setSelectedPlan(e.target.value)}
-              value={selectedPlan}
-              className="select"
-            >
-              <option value="basic">Básico - $10/mes</option>
-              <option value="pro">Pro - $20/mes</option>
-              <option value="premium">Premium - $30/mes</option>
-            </select>
-            <button className="save-button" onClick={onChangePlan}>
-              Confirmar
-            </button>
-          </div>
-        );
-      default:
-        return <div className="right-panel">Selecciona una opción para continuar.</div>;
-    }
-  };
 
   return (
-    <div className={`card ${isOwnDevice ? '' : 'invited-card'}`}>
-      <div className="card-header">
-        <div className="card-title-container">
+    <div className={`${styles.card} ${isOwnDevice ? '' : styles.invitedCard}`}>
+      <div className={styles.cardHeader}>
+        <div className={styles.cardTitleContainer}>
           {isEditingName ? (
             <>
               <input
                 type="text"
-                className="edit-input"
+                className={styles.editInput}
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
+                autoFocus
               />
-              <button className="save-edit-button" onClick={handleSaveEdit}>
+              <button className={styles.saveEditButton} onClick={handleSaveEdit}>
                 Guardar
               </button>
               <button
-                className="cancel-button"
+                className={styles.cancelButton}
                 onClick={() => setIsEditingName(false)}
               >
                 Cancelar
@@ -97,12 +52,12 @@ const DispositivoCard = ({
             </>
           ) : (
             <>
-              <h2 className="card-title">{title}</h2>
+              <h2 className={styles.cardTitle}>{title}</h2>
               {isOwnDevice && (
                 <img
                   src={editIcon}
                   alt="Editar nombre"
-                  className="edit-icon"
+                  className={styles.editIcon}
                   onClick={() => setIsEditingName(true)}
                   title="Editar Apodo"
                 />
@@ -115,23 +70,25 @@ const DispositivoCard = ({
             <img
               src={addIcon}
               alt="Generar código"
-              className="add-icon"
-              onClick={() => onGenerateCodigo(deviceId)} // Llama a la función pasada desde Home
+              className={styles.addIcon}
+              onClick={() => onGenerateCodigo(deviceId)} // Pasa una función anónima que llama a la función
               title="Generar Código de Invitado"
             />
+
+
             <img
               src={settingsIcon}
               alt="Configuración"
-              className="settings-icon"
-              onClick={() => setSelectedOption('settings')}
+              className={styles.settingsIcon}
+              onClick={() => onOpenSettingsModal(deviceId)} // Llama a la función que abre el modal
               title="Configuración"
             />
           </>
         )}
       </div>
-      <div className="card-content">
-        <img src={imageSrc} alt="Imagen de la tarjeta" className="card-image" />
-        <div className="card-text">
+      <div className={styles.cardContent}>
+        <img src={imageSrc} alt="Imagen de la tarjeta" className={styles.cardImage} />
+        <div className={styles.cardText}>
           <p>Última actualización: {lastUpdate}</p>
           <p>Tasa de actualización: {updateRate}</p>
           <p>Batería: {battery}</p>

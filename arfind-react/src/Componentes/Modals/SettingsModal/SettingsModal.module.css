@@ -1,0 +1,194 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal {
+    background: #fff;
+    border-radius: 10px;
+    width: fit-content;
+    max-width: 90%;
+    padding: 20px 40px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+    height: fit-content;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+  }
+  
+  .closeButton:hover {
+    color: #333;
+  }
+  
+  .modalBody {
+    display: flex;
+    width: 800px;
+    max-width: 90%;
+  }
+  
+  .leftPanel {
+    width: 35%;
+    border-right: 1px solid #ddd;
+    padding: 15px;
+  }
+  
+  .leftPanel h3 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    color: #333;
+    text-align: left;
+  }
+  
+  .leftPanel button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    background-color: transparent;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #555;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .leftPanel button:hover {
+    background-color: #eee;
+    color: #000;
+  }
+  
+  .dangerButton {
+    margin-top: 4rem;
+    color: red !important;
+    font-weight: bold;
+  }
+  
+  .rightPanel {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  .rightPanel h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .input,
+  .select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+  }
+  
+  .saveButton,
+  .deleteButton {
+    background-color: #0486FF;
+    color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 60%;
+    margin: 2rem auto;
+    font-weight: bold;
+  }
+  
+  .saveButton:hover {
+    background-color: #036dc9;
+  }
+  
+  .deleteButton {
+    background-color: #f44336;
+  }
+  
+  .deleteButton:hover {
+    background-color: #d32f2f;
+  }
+  .codeContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .generatedCode {
+    font-size: 1rem;
+    color: #333;
+    background: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .copyIcon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .copyIcon:hover {
+    transform: scale(1.1);
+  }
+  
+  .generateButton {
+    background-color: #0486FF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .generateButton:hover {
+    background-color: #036dc9;
+  }
+  
