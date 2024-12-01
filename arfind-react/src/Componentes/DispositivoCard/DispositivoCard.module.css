@@ -91,6 +91,7 @@
 .cardContent {
   display: flex;
   align-items: center;
+  width: 85%;
   padding: 15px;
   flex: 1; /* Permite que el contenido crezca hasta el límite de la tarjeta */
   overflow: hidden; /* Oculta el contenido que se desborda */
@@ -246,4 +247,22 @@
     opacity: 0;
     transform: translateX(-50%) translateY(10px);
   }
+}
+.viewLocationButton {
+  background-color: #0486FF;
+  position: absolute;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-top: 6rem;
+  transition: background-color 0.3s ease;
+  right: 2rem;
+}
+
+.viewLocationButton:hover {
+  background-color: #036dc9;
 }

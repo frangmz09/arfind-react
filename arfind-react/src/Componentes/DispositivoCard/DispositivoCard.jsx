@@ -11,14 +11,12 @@ const DispositivoCard = ({
   battery,
   imageSrc,
   isOwnDevice,
-  codigoInvitado,
-  onGenerateCodigo,
   onEditName,
   onOpenSettingsModal,
-  onOpenGenerateCodeModal, // Aquí se pasa
+  onOpenGenerateCodeModal,
+  onViewLocation, // Función para manejar "Ver ubicación"
   deviceId,
 }) => {
-
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState(title);
 
@@ -73,14 +71,14 @@ const DispositivoCard = ({
               src={addIcon}
               alt="Generar código"
               className={styles.addIcon}
-              onClick={() => onOpenGenerateCodeModal(deviceId)} 
+              onClick={() => onOpenGenerateCodeModal(deviceId)}
               title="Generar Código de Invitado"
             />
             <img
               src={settingsIcon}
               alt="Configuración"
               className={styles.settingsIcon}
-              onClick={() => onOpenSettingsModal(deviceId)} // Llama a la función que abre el modal
+              onClick={() => onOpenSettingsModal(deviceId)}
               title="Configuración"
             />
           </>
@@ -93,6 +91,12 @@ const DispositivoCard = ({
           <p>Tasa de actualización: {updateRate}</p>
           <p>Batería: {battery}</p>
         </div>
+        <button
+          className={styles.viewLocationButton} // Clase para estilo del botón
+          onClick={() => onViewLocation(deviceId)} // Llama a la función pasada desde `Home`
+        >
+          Ver ubicación
+        </button>
       </div>
     </div>
   );

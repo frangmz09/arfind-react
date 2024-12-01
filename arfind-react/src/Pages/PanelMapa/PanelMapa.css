@@ -6,6 +6,7 @@
     height: 100vh;
     box-sizing: border-box;
     position: relative; /* Necesario para el posicionamiento de los botones */
+    margin-top: 2rem;
 }
 
 .PanelMapa-logo {

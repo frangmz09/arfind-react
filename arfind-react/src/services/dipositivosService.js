@@ -101,3 +101,22 @@ export const configureDispositivo = async (deviceId, action, updates, token) => 
     throw error;
   }
 };
+
+export const eliminarInvitados = async (deviceId, invitedUsers, token) => {
+  if (!Array.isArray(invitedUsers) || invitedUsers.length === 0) {
+    throw new Error('La lista de usuarios invitados para eliminar no puede estar vacía.');
+  }
+  return await configureDispositivo(deviceId, 'eliminarInvitados', { invitedUsers }, token);
+};
+
+// Cambiar plan
+export const cambiarPlan = async (deviceId, planId, token) => {
+  if (!planId) {
+    throw new Error('El ID del nuevo plan es requerido para cambiar el plan.');
+  }
+  return await configureDispositivo(deviceId, 'cambiarPlan', { planId }, token);
+};
+// Darse de baja
+export const darseDeBaja = async (deviceId, token) => {
+  return await configureDispositivo(deviceId, 'darseDeBaja', null, token);
+};

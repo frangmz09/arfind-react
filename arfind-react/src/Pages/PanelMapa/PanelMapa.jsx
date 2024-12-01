@@ -1,27 +1,26 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './PanelMapa.css';
-import Logo from '../../Componentes/Logo/Logo'; // Importa tu componente Logo
-import BtnAux from '../../Componentes/BtnAux/BtnAux'; // Importa tu componente BtnAux
-import Mapa from '../../Pages/Home/Mapa/Mapa'; // Importa tu componente DispositivoCard
+import Logo from '../../Componentes/Logo/Logo';
+import BtnAux from '../../Componentes/BtnAux/BtnAux';
+import Mapa from '../../Pages/Home/Mapa/Mapa';
 
+const PanelMapa = () => {
+  const { state } = useLocation(); // Obtén el estado pasado desde la navegación
+  const locations = state?.locations || []; // Ubicaciones de los dispositivos
 
-const PanelMapa = ({ devices }) => {
-  useEffect(() => {
-    document.title = 'ARfind - Mapa '; 
-  }, []);
   return (
-    
     <div className="PanelMapa-page">
-      <BtnAux   className={'btnAux'}
-                image="/images/home.png" 
-                altText="Configuración" 
-                link='/'
-              />
+      <BtnAux
+        className="btnAux"
+        image="/images/home.png"
+        altText="Volver al inicio"
+        link="/"
+      />
       <div className="PanelMapa-logo">
         <Logo type="logo" altText="Logo" size="7rem" />
       </div>
-        <Mapa></Mapa>
+      <Mapa locations={locations} /> {/* Pasar ubicaciones al componente Mapa */}
     </div>
   );
 };
