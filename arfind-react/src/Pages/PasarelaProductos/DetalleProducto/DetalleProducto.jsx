@@ -42,16 +42,19 @@ const DetalleProducto = () => {
   const handleComprarAhora = async () => {
     if (planSeleccionado) {
       try {
+        const token = localStorage.getItem('userToken'); // Obtén el token desde localStorage u otro medio
+        if (!token) {
+          alert('No estás autenticado. Por favor, inicia sesión.');
+          return;
+        }
+  
         const orden = {
-          nombreProducto: producto.titulo,
-          descripcionProducto: producto.descripcion,
-          imagenProducto: producto.imagen,
-          cantidad: 1,
-          precio: producto.precio,
+          idProducto: producto.id, 
+          idPlan: planSeleccionado.id, 
         };
-
-        const response = await crearOrdenDinamicaWeb(orden);
-        window.location.href = response.url;
+  
+        const response = await crearOrdenDinamicaWeb(orden, token);
+        window.location.href = response.url; // Redirige a la URL de Mercado Pago
       } catch (error) {
         console.error('Error al procesar la compra:', error);
         alert('Hubo un problema al procesar la compra. Por favor, inténtalo nuevamente.');
@@ -60,6 +63,7 @@ const DetalleProducto = () => {
       alert('Por favor, seleccione un plan antes de continuar.');
     }
   };
+  
 
   if (cargando) {
     return <p>Cargando datos...</p>;

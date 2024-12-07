@@ -1,18 +1,16 @@
-import { apiFetch } from './api'; // Mantén consistencia usando apiFetch
+import { apiFetch } from './api'; // Asegúrate de usar tu helper para fetch
 
-export const crearOrdenDinamicaWeb = async (orden) => {
+export const crearOrdenDinamicaWeb = async (orden, token) => {
   try {
     const response = await apiFetch('/mercadopago/crearOrdenDinamicaWeb', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Asegúrate de incluir el tipo de contenido
+        'Content-Type': 'application/json', // Tipo de contenido
+        Authorization: `Bearer ${token}`, // Incluye el token en el encabezado Authorization
       },
       body: JSON.stringify({
-        nombreProducto: orden.nombreProducto,
-        descripcionProducto: orden.descripcionProducto,
-        imagenProducto: orden.imagenProducto,
-        cantidad: orden.cantidad,
-        precio: orden.precio,
+        idProducto: orden.idProducto, // ID del producto
+        idPlan: orden.idPlan, // ID del plan
       }),
     });
     return response; // Devuelve la respuesta (URL de Mercado Pago)

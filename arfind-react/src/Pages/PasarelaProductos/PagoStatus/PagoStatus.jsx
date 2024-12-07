@@ -11,7 +11,7 @@ const PagoStatus = () => {
 
     switch (estado) {
         case 'exitoso':
-            mensaje = '¡Gracias por tu compra! El pago fue exitoso.';
+            mensaje = '¡Gracias por tu compra! El pago fue exitoso. Por favor, revisa tus notificaciones!';
             clase = 'pago-exitoso';
             break;
         case 'fallo':
