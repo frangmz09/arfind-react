@@ -17,30 +17,36 @@ const PasarelaProductos = ({ products, height }) => {
     setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maxIndex));
   };
 
+  const showArrows = products.length > 4; // Mostrar flechas solo si hay más de 4 tarjetas
+
   return (
     <div className="pasarela-container" style={{ height }}>
-      <button className="arrow-btn left" onClick={handlePrev}>
-        <img src="/images/arrow1.png" alt="Anterior" />
-      </button>
+      {showArrows && (
+        <button className="arrow-btn left" onClick={handlePrev}>
+          <img src="/images/arrow1.png" alt="Anterior" />
+        </button>
+      )}
       <div className="pasarela-products">
         <div
           className="products-wrapper"
           style={{ transform: `translateX(-${currentIndex * moveAmount}%)` }}
         >
           {products.map((producto, index) => (
-            <ProductCard 
+            <ProductCard
               key={producto.id || index} // Usa el ID del producto como clave, si existe
               id={producto.id} // Pasa el ID del producto a ProductCard
               title={producto.titulo}
-              description={producto.tinydescripcion}
+              description={producto.tiny_descripcion}
               imageSrc={producto.imagen}
             />
           ))}
         </div>
       </div>
-      <button className="arrow-btn right" onClick={handleNext}>
-        <img src="/images/arrow2.png" alt="Siguiente" />
-      </button>
+      {showArrows && (
+        <button className="arrow-btn right" onClick={handleNext}>
+          <img src="/images/arrow2.png" alt="Siguiente" />
+        </button>
+      )}
     </div>
   );
 };

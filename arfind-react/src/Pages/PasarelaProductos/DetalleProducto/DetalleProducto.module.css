@@ -1,0 +1,202 @@
+.detalleProductoWrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f4;
+}
+
+.detalleProducto {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 30px auto;
+  max-width: 800px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, height 0.3s ease;
+  animation: expandCard 0.3s ease-in-out;
+  overflow: hidden;
+  position: relative;
+}
+
+@keyframes expandCard {
+  from {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.detalleProducto:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.detalleProductoImagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  height: 150px;
+}
+
+.detalleProductoImagen img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.detalleProductoInformacion {
+  text-align: center;
+}
+
+.detalleProductoTitulo {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.detalleProductoDescripcion {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.detalleProductoPrecio {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0486FF;
+  margin-bottom: 20px;
+}
+
+.detalleProductoPlanes {
+  margin-bottom: 20px;
+}
+
+.detalleProductoLabel {
+  font-size: 1rem;
+  color: #444;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.detalleProductoSelect {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detalleProductoSelect:focus {
+  border-color: #0486FF;
+  box-shadow: 0 0 5px rgba(4, 134, 255, 0.5);
+  outline: none;
+}
+
+.detalleProductoSelect option {
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.detalleProductoPlanDetalles {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  animation: expandCard 0.3s ease-in-out;
+}
+
+.detalleProductoPlanImagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.detalleProductoPlanInfo {
+  flex: 1;
+  text-align: left;
+}
+
+.detalleProductoPlanInfo h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.detalleProductoPlanInfo p {
+  font-size: 1rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+.detalleProductoBotonComprar {
+  background-color: #0486FF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.detalleProductoBotonComprar:hover {
+  background-color: #0366cc;
+  transform: translateY(-3px);
+}
+
+.detalleProductoBotonComprar:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.detalleProductoBotonComprar:disabled:hover {
+  transform: none;
+}
+
+@media (min-width: 768px) {
+  .detalleProducto {
+    flex-direction: row;
+    padding: 30px;
+  }
+
+  .detalleProductoImagen {
+    flex: 1;
+    margin-right: 30px;
+  }
+
+  .detalleProductoInformacion {
+    flex: 2;
+    text-align: left;
+  }
+}
+
+.detalleProductoBtnVolver {
+  z-index: 100;
+  width: 50px;
+  height: 50px;
+}

@@ -3,44 +3,64 @@ import { Link, useLocation } from 'react-router-dom';
 import NotificationPanel from '../../Pages/LandingPage/NotificationPanel/NotificationPanel';
 import Logo from '../Logo/Logo';
 import NavBarButton from '../NavBarButton/NavBarButton';
-import styles from './NavBar.module.css'; // Importación correcta de CSS Modules
+import PropTypes from 'prop-types';
+import { getMisNotificaciones } from '../../services/notificacionesService'; // Importa el servicio
+import styles from './NavBar.module.css';
 
 const NavBar = ({ isLoggedIn, onLogout }) => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]); // Estado para las notificaciones
   const [logoSize, setLogoSize] = useState('50px');
   const location = useLocation();
 
-  const notifications = [
-    { icon: '/images/icon.png', type: 'info', title: 'Nueva actualización', message: 'Se ha actualizado la versión del sistema.' },
-    { icon: '/images/icon.png', type: 'info', title: 'Nueva actualización', message: 'Se ha actualizado la versión del sistema.' },
-  ];
-
-  const handleNotificationClick = () => {
-    setIsNotificationOpen((prevState) => !prevState);
-  };
-
   useEffect(() => {
-    if (location.pathname === '/landing' || location.pathname === '/about' || location.pathname === '/contact') {
+    // Cambiar tamaño del logo dependiendo de la ruta
+    if (['/landing', '/about', '/contact'].includes(location.pathname)) {
       setLogoSize('200px');
     } else {
       setLogoSize('50px');
     }
-  }, [location]);
+  }, [location.pathname]); // Observa solo el pathname
 
   useEffect(() => {
-    if (location.pathname === '/landing' && location.hash) {
-      const targetElement = document.querySelector(location.hash);
-      if (targetElement) {
-        const navbarHeight = 80;
-        const targetPosition = targetElement.offsetTop - navbarHeight;
+    // Manejar desplazamiento a los elementos anclados
+    const handleScrollToAnchor = () => {
+      if (location.hash) {
+        const targetElement = document.querySelector(location.hash);
+        if (targetElement) {
+          const navbarHeight = 80; // Ajusta según el tamaño de tu navbar
+          const targetPosition = targetElement.offsetTop - navbarHeight;
 
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth',
-        });
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth',
+          });
+        }
       }
-    }
-  }, [location]);
+    };
+
+    handleScrollToAnchor();
+  }, [location.hash]); // Observa solo el hash
+
+  useEffect(() => {
+    // Cargar notificaciones si el usuario está autenticado
+    const fetchNotifications = async () => {
+      if (isLoggedIn) {
+        try {
+          const token = localStorage.getItem('userToken');
+          const response = await getMisNotificaciones(token);
+          setNotifications(response);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      }
+    };
+    fetchNotifications();
+  }, [isLoggedIn]);
+
+  const handleNotificationClick = () => {
+    setIsNotificationOpen((prevState) => !prevState);
+  };
 
   return (
     <div className={styles.navbar}>
@@ -94,6 +114,12 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
       )}
     </div>
   );
+};
+
+// Validación de props
+NavBar.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default NavBar;

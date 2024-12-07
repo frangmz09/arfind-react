@@ -173,10 +173,13 @@ const SettingsModal = ({
               )}
             </div>
             {showRecommendation && (
+            <>
+              <p className={styles.removeText}>Usuario eliminado exitosamente!</p>
               <p className={styles.recommendationText}>
                 En caso de eliminar a alguien, se recomienda generar un nuevo código de invitado.
               </p>
-            )}
+            </>
+          )}
           </div>
         );       
       case 'changePlan':

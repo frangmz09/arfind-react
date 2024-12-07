@@ -41,16 +41,46 @@ const Mapa = ({ locations }) => {
             position={location.position}
             title={`Dispositivo: ${location.apodo}`}
           >
-            <div
-              style={{
-                width: '50px',
-                height: '68px',
-                backgroundImage: `url(${markerImages[mapTipoProducto(location.tipoProducto)]})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-              }}
-            ></div>
+                     <div
+                    style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center', // Centra horizontalmente
+                    justifyContent: 'center', // Centra verticalmente
+                    position: 'relative', // Necesario para posicionar el ::after
+                    }}
+                    >
+                    <div
+                    style={{
+                    width: '50px',
+                    height: '68px',
+                    backgroundImage: `url(${markerImages[mapTipoProducto(location.tipoProducto)]})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    }}
+                    ></div>
+                    <div
+                    style={{
+                    position: 'absolute',
+                    bottom: '-20px', // Ajusta la posición del texto
+                    pointerEvents: 'none', // Elimina la interacción del ratón
+                    }}
+                    >
+                    <span
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: 'bolder',
+                      color: '#0486FF',
+                      whiteSpace: 'nowrap', // Evita que el texto haga wrap
+                    }}
+                    >
+                    {location.apodo}
+                    </span>
+                    </div>
+                    </div>
+
+
           </AdvancedMarker>
         ))}
       </Map>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './DetalleProducto.css';
-import { getPlanes } from '../../../services/planesService'; // Servicio para obtener planes
-import { getProductoById } from '../../../services/productosService'; // Servicio para obtener el producto por ID
-import { crearOrdenDinamicaWeb } from '../../../services/pagosService'; // Servicio de pagos
+import styles from './DetalleProducto.module.css';
+import BtnAux from '../../../Componentes/BtnAux/BtnAux'; // Asegúrate de importar BtnAux
+import { getPlanes } from '../../../services/planesService';
+import { getProductoById } from '../../../services/productosService';
+import { crearOrdenDinamicaWeb } from '../../../services/pagosService';
 
 const DetalleProducto = () => {
-  const { id } = useParams(); // Obtén el ID del producto desde la URL
+  const { id } = useParams();
   const [producto, setProducto] = useState(null);
   const [planes, setPlanes] = useState([]);
   const [planSeleccionado, setPlanSeleccionado] = useState(null);
@@ -16,14 +17,11 @@ const DetalleProducto = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Carga del producto
         const productoData = await getProductoById(id);
         setProducto(productoData);
 
-        // Carga de planes
         const planesData = await getPlanes();
-        const planesValidos = planesData.filter((plan) => plan.nombre); // Filtrar solo planes válidos
-        setPlanes(planesValidos);
+        setPlanes(planesData.filter((plan) => plan.nombre));
       } catch (err) {
         console.error('Error al cargar los datos:', err);
         setError('Error al cargar el producto o los planes.');
@@ -36,7 +34,9 @@ const DetalleProducto = () => {
   }, [id]);
 
   const handlePlanChange = (event) => {
-    setPlanSeleccionado(event.target.value);
+    const planId = event.target.value;
+    const plan = planes.find((p) => p.id === planId);
+    setPlanSeleccionado(plan);
   };
 
   const handleComprarAhora = async () => {
@@ -46,14 +46,11 @@ const DetalleProducto = () => {
           nombreProducto: producto.titulo,
           descripcionProducto: producto.descripcion,
           imagenProducto: producto.imagen,
-          cantidad: 1, // Siempre 1 porque es un único producto
-          precio: producto.precio, // Precio del producto
+          cantidad: 1,
+          precio: producto.precio,
         };
 
-        // Llamar al servicio para crear la orden
         const response = await crearOrdenDinamicaWeb(orden);
-        
-        // Redirigir al usuario a la URL de Mercado Pago
         window.location.href = response.url;
       } catch (error) {
         console.error('Error al procesar la compra:', error);
@@ -69,7 +66,7 @@ const DetalleProducto = () => {
   }
 
   if (error) {
-    return <p className="error-message">{error}</p>;
+    return <p className={styles.errorMessage}>{error}</p>;
   }
 
   if (!producto) {
@@ -77,24 +74,31 @@ const DetalleProducto = () => {
   }
 
   return (
-    <div className="detalle-producto">
-      <div className="detalle-producto__imagen">
+    <div className={styles.detalleProductoWrapper}>
+    <div className={styles.detalleProducto}>
+      <BtnAux
+        className={styles.detalleProductoBtnVolver}
+        image="/images/back.png"
+        altText="Volver al inicio"
+        link="/"
+      />
+      <div className={styles.detalleProductoImagen}>
         <img src={producto.imagen} alt={producto.titulo} />
       </div>
-      <div className="detalle-producto__informacion">
-        <h2 className="detalle-producto__titulo">{producto.titulo}</h2>
-        <p className="detalle-producto__descripcion">{producto.descripcion}</p>
-        <p className="detalle-producto__precio">{`$${producto.precio.toFixed(2)}`}</p>
-        <div className="detalle-producto__planes">
-          <label htmlFor="plan-select" className="detalle-producto__label">
+      <div className={styles.detalleProductoInformacion}>
+        <h2 className={styles.detalleProductoTitulo}>{producto.titulo}</h2>
+        <p className={styles.detalleProductoDescripcion}>{producto.descripcion}</p>
+        <p className={styles.detalleProductoPrecio}>{`$${producto.precio.toFixed(2)}`}</p>
+        <div className={styles.detalleProductoPlanes}>
+          <label htmlFor="plan-select" className={styles.detalleProductoLabel}>
             Seleccione un plan:
           </label>
           {planes.length > 0 ? (
             <select
               id="plan-select"
-              className="detalle-producto__select"
+              className={styles.detalleProductoSelect}
               onChange={handlePlanChange}
-              value={planSeleccionado || ''}
+              value={planSeleccionado?.id || ''}
             >
               <option value="">Seleccione un plan</option>
               {planes.map((plan) => (
@@ -107,14 +111,40 @@ const DetalleProducto = () => {
             <p>No hay planes disponibles.</p>
           )}
         </div>
+        {planSeleccionado && (
+          <div className={styles.detalleProductoPlanDetalles}>
+            <img
+              src={planSeleccionado.imagen || 'https://placehold.co/50x50.png'}
+              alt={planSeleccionado.nombre}
+              className={styles.detalleProductoPlanImagen}
+            />
+            <div className={styles.detalleProductoPlanInfo}>
+              <h3>{planSeleccionado.nombre}</h3>
+              <p>{planSeleccionado.descripcion}</p>
+              <p>
+                <strong>Precio:</strong> ${planSeleccionado.precio}/mes
+              </p>
+              <p>
+                <strong>Cantidad de compartidos:</strong>{' '}
+                {planSeleccionado.cantidad_compartidos}{' '}
+                {planSeleccionado.cantidad_compartidos === 1 ? 'persona' : 'personas'}
+              </p>
+              <p>
+                <strong>Refresco:</strong> Cada {planSeleccionado.refresco}{' '}
+                {planSeleccionado.refresco === 1 ? 'minuto' : 'minutos'}
+              </p>
+            </div>
+          </div>
+        )}
         <button
-          className="detalle-producto__boton-comprar"
+          className={styles.detalleProductoBotonComprar}
           disabled={!planSeleccionado}
           onClick={handleComprarAhora}
         >
           Comprar ahora
         </button>
       </div>
+    </div>
     </div>
   );
 };

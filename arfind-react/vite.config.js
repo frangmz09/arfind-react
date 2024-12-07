@@ -7,4 +7,7 @@ export default defineConfig({
   server: {
     port: 3001, // Cambia el puerto según tus necesidades
   },
+  build: {
+    sourcemap: false, // Desactiva los mapas de fuente
+  },
 })

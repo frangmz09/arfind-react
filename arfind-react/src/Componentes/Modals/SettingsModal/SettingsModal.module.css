@@ -382,6 +382,12 @@
     color: #666;
     text-align: left;
   }
+  .removeText {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: red;
+    text-align: left;
+  }
   
   .modalOverlay {
     position: fixed;

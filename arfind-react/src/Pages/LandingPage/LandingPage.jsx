@@ -192,8 +192,8 @@ const Landing = () => {
       <footer style={styles.footer}>
         <p>Protegé lo que más valorás con ARfind. ¿Listo para empezar?</p>
       </footer>
-      <div class="start-button-container">
-        <a href="/login" class="start-button">Acceder al sistema</a>
+      <div className="start-button-container">
+        <a href="/login" className="start-button">Acceder al sistema</a>
       </div>
       {/* Testimonios Section */}
       <section style={styles.testimonios}>

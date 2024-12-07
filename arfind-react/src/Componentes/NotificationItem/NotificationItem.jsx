@@ -3,12 +3,18 @@ import PropTypes from 'prop-types';
 import './NotificationItem.css';
 
 const NotificationItem = ({ notification }) => {
+  const defaultIcon = '/images/icon.png'; // Ruta de la imagen por defecto
+
   return (
     <div className="notification-item">
-      <img src={notification.icon} alt={notification.type} className="notification-icon" />
+      <img
+        src={notification.icono || defaultIcon} // Usa el ícono de la notificación o la imagen por defecto
+        alt={notification.tipo}
+        className="notification-icon"
+      />
       <div className="notification-content">
-        <h4>{notification.title}</h4>
-        <p>{notification.message}</p>
+        <h4>{notification.tipo}</h4>
+        <p>{notification.mensaje}</p>
       </div>
     </div>
   );
@@ -16,10 +22,9 @@ const NotificationItem = ({ notification }) => {
 
 NotificationItem.propTypes = {
   notification: PropTypes.shape({
-    icon: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired,
+    icono: PropTypes.string, // Ya no es obligatorio porque podemos usar una imagen por defecto
+    tipo: PropTypes.string.isRequired,
+    mensaje: PropTypes.string.isRequired,
   }).isRequired,
 };
 

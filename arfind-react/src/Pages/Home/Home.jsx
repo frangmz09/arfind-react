@@ -66,6 +66,7 @@ const Home = () => {
       );
     } catch (error) {
       console.error('Error al eliminar invitado:', error);
+      showToast(error.message || 'Error al eliminar invitado, intente nuevamente.', 'error');
     }
   };
   
@@ -87,8 +88,8 @@ const Home = () => {
       setShowToast(true);
     } catch (err) {
       console.error('Error cambiando el plan:', err);
-      setToastMessage('Error al cambiar el plan. Intenta nuevamente.');
-      setShowToast(true);
+      showToast(err.message || 'Error al eliminar invitado, intente nuevamente.', 'error');
+
     }
   };
 
@@ -99,7 +100,8 @@ const Home = () => {
       setPlanes(planesResponse); // Guarda los planes en el estado
     } catch (err) {
       console.error('Error obteniendo los planes:', err);
-      setError('Error obteniendo planes.');
+      showToast(err.message || 'Error obteniendo los planes.', 'error');
+
     }
   };
   useEffect(() => {
@@ -141,7 +143,7 @@ const Home = () => {
       setProducts(productsResponse);
     } catch (err) {
       console.error('Error obteniendo los productos:', err);
-      setError('Error obteniendo productos.');
+      showToast(err.message || 'Error obteniendo los productos.', 'error');
     }
   };
 
@@ -150,12 +152,20 @@ const Home = () => {
     try {
       // Hacer las solicitudes de dispositivos en paralelo
       const [ownDevicesResponse, invitedDevicesResponse] = await Promise.all([
-        getDispositivosByUsuario(token),
-        getDispositivosInvitados(token),
+        getDispositivosByUsuario(token).catch(() => []), // Manejo de error: si falla, retorna []
+        getDispositivosInvitados(token).catch(() => []), // Manejo de error: si falla, retorna []
       ]);
   
-      // Extraer ubicaciones de dispositivos propios
-      const ownDeviceLocations = ownDevicesResponse
+      // Asegurarnos de que las respuestas sean listas (arrays)
+      const ownDevicesData = Array.isArray(ownDevicesResponse) ? ownDevicesResponse : [];
+      const invitedDevicesData = Array.isArray(invitedDevicesResponse) ? invitedDevicesResponse : [];
+  
+      // Actualizar estados
+      setOwnDevices(ownDevicesData);
+      setInvitedDevices(invitedDevicesData);
+  
+      // Actualizar ubicaciones
+      const ownDeviceLocations = ownDevicesData
         .filter((device) => device.ubicacion) // Verificar que tengan ubicación
         .map((device) => ({
           id: device.id,
@@ -163,36 +173,36 @@ const Home = () => {
             lat: device.ubicacion._latitude,
             lng: device.ubicacion._longitude,
           },
-          tipoProducto: device.tipo_producto, // ID del tipo de producto
-          apodo: device.apodo || 'Sin apodo', // Apodo con valor predeterminado
-          imageSrc: device.imagen, // Imagen del dispositivo
+          tipoProducto: device.tipo_producto,
+          apodo: device.apodo || 'Sin apodo',
+          imageSrc: device.imagen,
         }));
   
-        const invitedDeviceLocations = invitedDevicesResponse
-        .filter((device) => device.ubicacion) // Asegura que tenga coordenadas
+      const invitedDeviceLocations = invitedDevicesData
+        .filter((device) => device.ubicacion) // Verificar que tengan ubicación
         .map((device) => ({
           id: device.id,
           position: {
             lat: device.ubicacion._latitude,
             lng: device.ubicacion._longitude,
           },
-          tipoProducto: device.tipo_producto, // Para el marcador
-          apodo: device.apodo || 'Sin apodo', // Nombre predeterminado
-          imageSrc: device.imagen, // Imagen del dispositivo
+          tipoProducto: device.tipo_producto,
+          apodo: device.apodo || 'Sin apodo',
+          imageSrc: device.imagen,
         }));
-      
-      const allLocations = [...ownDeviceLocations, ...invitedDeviceLocations];      
   
-      // Actualizar estados
-      setOwnDevices(ownDevicesResponse);
-      setInvitedDevices(invitedDevicesResponse);
+      const allLocations = [...ownDeviceLocations, ...invitedDeviceLocations];
       setLocations(allLocations); // Actualizar el estado con las ubicaciones
   
       console.log("Dispositivos cargados correctamente:", allLocations);
     } catch (err) {
       console.error("Error obteniendo los dispositivos:", err);
+      showToast(err.message || 'Error al obtener dispositivos.', 'error');
+      setOwnDevices([]);
+      setInvitedDevices([]);
     }
   };
+  
   
   
 
@@ -224,15 +234,23 @@ const Home = () => {
         )
       );
   
+      // Actualizar el código en el modal
+      setGenerateCodeDevice((prev) =>
+        prev && prev.id === deviceId
+          ? { ...prev, codigo_invitado: response.codigo_invitado }
+          : prev
+      );
+  
       setToastMessage("¡Código generado con éxito!");
       setShowToast(true);
   
       return response.codigo_invitado; // Devolver el código generado
     } catch (error) {
       console.error("Error generando código de invitado:", error);
-      setError("No se pudo generar el código. Intenta nuevamente.");
+      showToast(error.message || "No se pudo generar el código de invitado. Intenta nuevamente.", "error");
     }
   };
+  
   
 
   const handleEditName = async (deviceId, newName) => {
@@ -248,7 +266,8 @@ const Home = () => {
       setShowToast(true);
     } catch (error) {
       console.error('Error actualizando el apodo:', error);
-      setError('No se pudo actualizar el nombre. Intenta nuevamente.');
+      showToast(error.message || 'Error al actualizar el nombre.', 'error');
+
     }
   };
 
@@ -261,7 +280,7 @@ const Home = () => {
       fetchDevices(token);
     } catch (error) {
       console.error('Error agregando dispositivo invitado:', error);
-      setError('No se pudo agregar el dispositivo. Intenta nuevamente.');
+      showToast(err.message || 'No se pudo agregar el dispositivo. Intenta nuevamente.', 'error');
     }
   };
 
@@ -292,20 +311,28 @@ const Home = () => {
   }
 
   return (
+    
     <div className={styles.homePage}>
       <div className={styles.homeLogo}>
         <Logo type="logo" altText="Logo" size="13rem" />
       </div>
+      
       <div className={styles.homeContent}>
+      <div className={styles.pasarelaHome}>
+        <h2 className={styles.homeTitle}>Realiza el pedido de tu próximo dispositivo</h2>
+        {products.length === 0 ? (
+          <p>No hay productos disponibles.</p>
+        ) : (
+          <PasarelaProductos products={products} height="150px" />
+        )}
+      </div>
         {error && <p className={styles.errorMessage}>{error}</p>}
 
         <h1 className={styles.homeTitle}>Tus Dispositivos Propios</h1>
         <div className={styles.homeCards}>
-          {ownDevices.length === 0 ? (
-            <p>No tienes dispositivos propios registrados.</p>
-          ) : (
-            ownDevices.map((device) => (
-              <DispositivoCard
+        {ownDevices.length > 0 ? (
+          ownDevices.map((device) => (
+            <DispositivoCard
               key={device.id}
               title={device.apodo || 'Sin apodo'}
               lastUpdate={new Date(device.ult_actualizacion?._seconds * 1000).toLocaleString() || 'Sin actualizaciones'}
@@ -313,22 +340,27 @@ const Home = () => {
               battery={`${device.bateria?.toFixed(0) || 0}%`}
               imageSrc={device.imagen}
               isOwnDevice={true}
-              onGenerateCodigo={handleGenerateCodigo} // Para generar el código cuando el usuario haga clic
+              onGenerateCodigo={handleGenerateCodigo}
               onEditName={(newName) => handleEditName(device.id, newName)}
-              onOpenSettingsModal={handleOpenSettingsModal} // Configuración modal
-              onOpenGenerateCodeModal={handleOpenGenerateCodeModal} // Asegúrate de pasar esta función
+              onOpenSettingsModal={handleOpenSettingsModal}
+              onOpenGenerateCodeModal={handleOpenGenerateCodeModal}
               deviceId={device.id}
-              onViewLocation={handleViewLocation} // Pasar función aquí
-              
-
+              onViewLocation={handleViewLocation}
             />
-            ))
-          )}
+          ))
+        ) : (
+          <p>No tienes dispositivos propios registrados.</p>
+        )}
+       
+      </div>
+      {ownDevices.length > 0 && (
+        <div className={styles.extraButtons}>
+          <button onClick={handleViewAllLocations} className={styles.panelBtn}>
+            Visualizar ubicación de todos los dispositivos
+          </button>
         </div>
-
-        <button onClick={() => setIsModalOpen(true)} className={styles.panelBtn}>
-          Agregar dispositivo Invitado
-        </button>
+      )}
+       
 
         {isModalOpen && (
           <AddInvitedDeviceModal
@@ -396,24 +428,12 @@ const Home = () => {
 
         {showToast && <Toast message={toastMessage} />}
       </div>
-      {ownDevices.length > 0 && (
-        <div className={styles.extraButtons}>
-          <button onClick={handleViewAllLocations} className={styles.panelBtn}>
-            Visualizar ubicación de todos los dispositivos
-          </button>
-        </div>
-      )}
-      <div className={styles.pasarelaHome}>
-        <h2 className={styles.homeTitle}>Realiza el pedido de tu próximo dispositivo</h2>
-        {products.length === 0 ? (
-          <p>No hay productos disponibles.</p>
-        ) : (
-          <PasarelaProductos products={products} height="150px" />
-        )}
-      </div>
+       <button onClick={() => setIsModalOpen(true)} className={styles.panelBtn}>
+          Agregar dispositivo Invitado
+        </button>
       <div className={styles.homeButtons}>
-        <BtnAux image="/images/settings.png" altText="Configuración" link="/" />
-        <BtnAux image="/images/support.png" altText="Soporte" link="/support" />
+        <BtnAux image="/images/settings.png" altText="Configuración" link="/account-settings" />
+        <BtnAux image="/images/support.png" altText="Soporte" link="/contact" />
       </div>
     </div>
   );

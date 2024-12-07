@@ -5,24 +5,36 @@ import './NotificationPanel.css'; // Verifica la ruta del archivo
 
 const NotificationPanel = ({ notifications, onClose }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [sortedNotifications, setSortedNotifications] = useState([]);
 
   useEffect(() => {
-    // Abre el panel cuando hay notificaciones
-    if (notifications.length > 0) {
+    // Ordenar notificaciones por fecha_envio (_seconds) en orden descendente
+    const sorted = [...notifications].sort(
+      (a, b) => b.fecha_envio._seconds - a.fecha_envio._seconds
+    );
+    setSortedNotifications(sorted);
+
+    // Abrir el panel si hay notificaciones
+    if (sorted.length > 0) {
       setIsPanelOpen(true);
     } else {
-      // Cierra el panel con un retraso para permitir la animación
       setIsPanelOpen(false);
     }
   }, [notifications]);
 
   return (
     <>
-      <div className={`notification-panel-overlay ${isPanelOpen ? 'show' : ''}`} onClick={onClose}></div> {/* Capa oscura de fondo */}
+      <div
+        className={`notification-panel-overlay ${isPanelOpen ? 'show' : ''}`}
+        onClick={onClose}
+      ></div>{' '}
+      {/* Capa oscura de fondo */}
       <div className={`notification-panel ${isPanelOpen ? 'open' : ''}`}>
-        <button className="close-button" onClick={onClose}><img src="/images/x.png"/></button>
-        {notifications.length > 0 ? (
-          notifications.map((notification, index) => (
+        <button className="close-button" onClick={onClose}>
+          <img src="/images/x.png" />
+        </button>
+        {sortedNotifications.length > 0 ? (
+          sortedNotifications.map((notification, index) => (
             <NotificationItem key={index} notification={notification} />
           ))
         ) : (

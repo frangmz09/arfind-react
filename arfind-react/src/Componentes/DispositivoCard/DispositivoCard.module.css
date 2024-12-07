@@ -13,6 +13,9 @@
   padding: 0.5rem;
 }
 
+.cardTitleContainer button{
+  margin-left: 0.5rem;
+}
 .invitedCard {
   border-color: #FFC107; /* Color amarillo para dispositivos invitados */
 }
@@ -109,7 +112,7 @@
   flex: 1; /* Permite que el texto se ajuste dentro del espacio disponible */
 }
 
-.cardTextP {
+.cardText p {
   line-height: 2;
   font-size: 0.8rem;
   text-wrap: nowrap;
