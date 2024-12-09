@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Contact.css'; // Archivo CSS para estilos
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { name, email, message } = formData;
+    const recipientEmail = 'soporte@arfind.com'; // Cambia esto por tu dirección de correo
+    const subject = `Consulta de ${name}`;
+    const body = `Nombre: ${name}%0D%0AEmail: ${email}%0D%0AMensaje:%0D%0A${message}`;
+
+    // Abre el cliente de correo
+    window.location.href = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   return (
     <div style={styles.container}>
-      
       {/* Título de la página */}
       <header style={styles.header}>
         <h1 style={styles.title}>Contáctanos</h1>
@@ -12,7 +37,7 @@ const Contact = () => {
           Nos encantaría saber de ti. Completa el formulario o usa nuestras vías de contacto para cualquier consulta.
         </p>
       </header>
-      
+
       {/* Información de contacto */}
       <section style={styles.contactInfo}>
         <div style={styles.infoItem}>
@@ -31,19 +56,43 @@ const Contact = () => {
 
       {/* Formulario de contacto */}
       <section style={styles.formSection}>
-        <h2 style={styles.title}>Formulario de Contacto</h2> {/* Usa el mismo estilo de title */}
-        <form style={styles.form}>
+        <h2 style={styles.title}>Formulario de Contacto</h2>
+        <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.formGroup}>
             <label style={styles.label} htmlFor="name">Nombre</label>
-            <input style={styles.input} type="text" id="name" name="name" required />
+            <input
+              style={styles.input}
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div style={styles.formGroup}>
             <label style={styles.label} htmlFor="email">Correo Electrónico</label>
-            <input style={styles.input} type="email" id="email" name="email" required />
+            <input
+              style={styles.input}
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div style={styles.formGroup}>
             <label style={styles.label} htmlFor="message">Mensaje</label>
-            <textarea style={styles.textarea} id="message" name="message" rows="5" required></textarea>
+            <textarea
+              style={styles.textarea}
+              id="message"
+              name="message"
+              rows="5"
+              value={formData.message}
+              onChange={handleChange}
+              required
+            ></textarea>
           </div>
           <button type="submit" style={styles.button}>Enviar Mensaje</button>
         </form>
@@ -140,4 +189,3 @@ const styles = {
 };
 
 export default Contact;
-

@@ -1,17 +1,22 @@
 .card {
   display: flex;
   flex-direction: column;
+  justify-content: space-between; /* Distribuye el contenido uniformemente */
+  align-items: center; /* Centra horizontalmente */
   width: 30%;
-  max-height: 210px;
+  min-height: 260px; /* Fuerza una altura mínima uniforme */
+  max-height: 260px; /* Asegura que las tarjetas no se extiendan más de lo necesario */
   border: 3px solid #0486FF; /* Color por defecto para dispositivos propios */
   border-radius: 20px;
   overflow: hidden;
   position: relative;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
-  transition: border-color 0.3s ease; /* Animación suave en cambio de color */
   padding: 0.5rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease; /* Animación suave en cambio de color */
 }
+
 
 .cardTitleContainer button{
   margin-left: 0.5rem;
@@ -107,9 +112,11 @@
 }
 
 .cardText {
-  padding-left: 1rem;
-  text-align: left;
-  flex: 1; /* Permite que el texto se ajuste dentro del espacio disponible */
+  display: flex;
+  flex-direction: column; /* Coloca los elementos en columna */
+  align-items: flex-start; /* Alinea a la izquierda (o al centro según diseño) */
+  gap: 10px; /* Espaciado entre elementos */
+  padding-left: 10px;
 }
 
 .cardText p {
@@ -132,6 +139,8 @@
   cursor: pointer;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  margin-top: 10px; /* Espaciado superior */
+  align-self: center; /* Centra el botón */
 }
 
 .editInputContainer {
@@ -268,4 +277,58 @@
 
 .viewLocationButton:hover {
   background-color: #036dc9;
+}
+.noLocationMessage {
+  color: #888;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Estilo del contenedor para dispositivos sin plan */
+.noPlanContainer {
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+/* Mensaje indicativo */
+.noPlanMessage {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Botón Seleccionar Plan */
+.selectPlanButton {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff; /* Azul estándar */
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover del botón */
+.selectPlanButton:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+  transform: scale(1.05); /* Efecto de zoom ligero */
+}
+
+/* Activo del botón */
+.selectPlanButton:active {
+  background-color: #003d80; /* Azul aún más oscuro */
+  transform: scale(0.95); /* Efecto de presionado */
+}
+
+/* Deshabilitado (si es necesario en algún momento) */
+.selectPlanButton:disabled {
+  background-color: #ccc;
+  color: #777;
+  cursor: not-allowed;
 }

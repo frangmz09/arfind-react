@@ -250,7 +250,7 @@ const SettingsModal = ({
             </div>
             <button
               onClick={handleChangePlan}
-              className={styles.changePlanButton}
+              className={styles.saveButton}
             >
               Cambiar Plan
             </button>

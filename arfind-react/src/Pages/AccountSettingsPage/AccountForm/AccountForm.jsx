@@ -7,14 +7,13 @@ const AccountForm = ({ user, token, onSave }) => {
   const [formData, setFormData] = useState({
     nombre: user.nombre,
     apellido: user.apellido,
-    correo: user.correo,
+    correo: user.correo, // Correo sigue presente en el estado, pero será de solo lectura
     telefono: user.telefono,
   });
 
   const [isEditable, setIsEditable] = useState({
     nombre: false,
     apellido: false,
-    correo: false,
     telefono: false,
   });
 
@@ -43,7 +42,7 @@ const AccountForm = ({ user, token, onSave }) => {
       if (!token) {
         throw new Error('No se encontró el token de autenticación.');
       }
-  
+
       // Llama al servicio para actualizar la información del cliente
       await updateCliente(token, formData);
       onSave(formData); // Actualiza la información en el estado padre
@@ -54,7 +53,6 @@ const AccountForm = ({ user, token, onSave }) => {
       setLoading(false);
     }
   };
-  
 
   return (
     <form onSubmit={handleSubmit} className="account-form">
@@ -79,8 +77,9 @@ const AccountForm = ({ user, token, onSave }) => {
         name="correo"
         value={formData.correo}
         onChange={handleChange}
-        isEditable={isEditable.correo}
-        onEdit={() => handleEdit('correo')}
+        isEditable={false} // No es editable
+        readOnly={true} // Campo de solo lectura
+        hideEditIcon={true} // Ocultar el ícono de edición
       />
       <InputField
         label="Teléfono"

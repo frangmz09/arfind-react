@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from '../../../Context/AuthContext';
 import './Login.css';
 import BtnAux from '../../../Componentes/BtnAux/BtnAux';
 import Logo from '../../../Componentes/Logo/Logo';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
+  const { handleLogin } = useAuth(); // Utiliza el método del AuthContext
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -31,11 +33,11 @@ const Login = ({ onLogin }) => {
     if (Object.keys(formErrors).length === 0) {
       try {
         const auth = getAuth();
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);        
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const token = await userCredential.user.getIdToken();
-        localStorage.setItem('userToken', token);  
- 
-        onLogin(); // Notifica al componente padre que el usuario se ha logueado
+        localStorage.setItem('userToken', token);
+
+        handleLogin(); // Llama a handleLogin desde el contexto
       } catch (error) {
         console.error("Error de autenticación: ", error);
         setErrors({ general: 'Error al iniciar sesión. Por favor, revisa tus credenciales.' });

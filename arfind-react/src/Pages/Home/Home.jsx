@@ -18,7 +18,8 @@ import {
   updateApodoDispositivo,
   submitCodigoInvitado,
   eliminarInvitados,
-  cambiarPlan
+  cambiarPlan,
+  darseDeBaja
 } from '../../services/dipositivosService';
 import { getProductos } from '../../services/productosService';
 import { getPlanes } from '../../services/planesService';
@@ -47,6 +48,28 @@ const Home = () => {
       navigate('/mapa', { state: { locations: [deviceLocation] } }); // Navegar al mapa con la ubicación específica
     }
   };
+  const handleUnsubscribeDevice = async (deviceId) => {
+    try {
+      const token = localStorage.getItem('userToken'); // Obtén el token de autenticación
+      await darseDeBaja(deviceId, token); // Llama al servicio con el ID del dispositivo
+      
+      // Elimina el dispositivo del estado de dispositivos propios
+      setOwnDevices((prevDevices) => prevDevices.filter((device) => device.id !== deviceId));
+  
+      setToastMessage('¡Te has dado de baja del dispositivo con éxito!');
+      setShowToast(true);
+  
+      // Fuerza la recarga de dispositivos desde la API
+      const updatedDevices = await getDispositivosByUsuario(token);
+      setOwnDevices(updatedDevices);
+    } catch (error) {
+      console.error('Error al darse de baja del dispositivo:', error);
+      setToastMessage(error.message || 'Error al darse de baja. Intenta nuevamente.');
+      setShowToast(true);
+    }
+  };
+  
+  
   const handleRemoveInvite = async (deviceId, userId) => {
     try {
       const token = localStorage.getItem('userToken');
@@ -165,31 +188,35 @@ const Home = () => {
       setInvitedDevices(invitedDevicesData);
   
       // Actualizar ubicaciones
-      const ownDeviceLocations = ownDevicesData
-        .filter((device) => device.ubicacion) // Verificar que tengan ubicación
-        .map((device) => ({
-          id: device.id,
-          position: {
-            lat: device.ubicacion._latitude,
-            lng: device.ubicacion._longitude,
-          },
-          tipoProducto: device.tipo_producto,
-          apodo: device.apodo || 'Sin apodo',
-          imageSrc: device.imagen,
-        }));
-  
-      const invitedDeviceLocations = invitedDevicesData
-        .filter((device) => device.ubicacion) // Verificar que tengan ubicación
-        .map((device) => ({
-          id: device.id,
-          position: {
-            lat: device.ubicacion._latitude,
-            lng: device.ubicacion._longitude,
-          },
-          tipoProducto: device.tipo_producto,
-          apodo: device.apodo || 'Sin apodo',
-          imageSrc: device.imagen,
-        }));
+      const ownDeviceLocations = ownDevicesData.map((device) => ({
+        id: device.id,
+        position: device.ubicacion
+          ? {
+              lat: device.ubicacion._latitude,
+              lng: device.ubicacion._longitude,
+            }
+          : null, // Asegúrate de asignar null si no hay ubicación
+        tipoProducto: device.tipo_producto,
+        apodo: device.apodo || 'Sin apodo',
+        imageSrc: device.imagen,
+      }));
+      
+      
+      const invitedDeviceLocations = invitedDevicesData.map((device) => ({
+        id: device.id,
+        position: device.ubicacion
+          ? {
+              lat: device.ubicacion._latitude,
+              lng: device.ubicacion._longitude,
+            }
+          : null,
+        tipoProducto: device.tipo_producto,
+        apodo: device.apodo || 'Sin apodo',
+        imageSrc: device.imagen,
+      }));
+      
+      
+      
   
       const allLocations = [...ownDeviceLocations, ...invitedDeviceLocations];
       setLocations(allLocations); // Actualizar el estado con las ubicaciones
@@ -330,12 +357,38 @@ const Home = () => {
 
         <h1 className={styles.homeTitle}>Tus Dispositivos Propios</h1>
         <div className={styles.homeCards}>
-        {ownDevices.length > 0 ? (
-          ownDevices.map((device) => (
+        {ownDevices
+        .slice() // Crea una copia para no modificar el estado original
+        .sort((a, b) => {
+          // Si `plan_id` está presente, lo consideramos primero
+          if (a.plan_id && !b.plan_id) return -1;
+          if (!a.plan_id && b.plan_id) return 1;
+          return 0; // Mantén el orden relativo si ambos tienen o no tienen `plan_id`
+        })
+        .map((device) => {
+          const deviceLocation = locations.find((loc) => loc.id === device.id);
+          const hasPlan = !!device.plan_id; // Verifica si tiene un plan asociado
+          const onViewLocation =
+            deviceLocation && deviceLocation.position
+              ? () => handleViewLocation(device.id)
+              : undefined;
+
+          console.log({
+            device: device.apodo,
+            location: deviceLocation,
+            hasPlan,
+            onViewLocation,
+          }); // Depuración
+
+          return (
             <DispositivoCard
               key={device.id}
               title={device.apodo || 'Sin apodo'}
-              lastUpdate={new Date(device.ult_actualizacion?._seconds * 1000).toLocaleString() || 'Sin actualizaciones'}
+              lastUpdate={
+                device.ult_actualizacion
+                  ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
+                  : 'Sin actualizaciones'
+              }
               updateRate={`${device.refresco} ${device.refresco === 1 ? 'minuto' : 'minutos'}`}
               battery={`${device.bateria?.toFixed(0) || 0}%`}
               imageSrc={device.imagen}
@@ -345,12 +398,20 @@ const Home = () => {
               onOpenSettingsModal={handleOpenSettingsModal}
               onOpenGenerateCodeModal={handleOpenGenerateCodeModal}
               deviceId={device.id}
-              onViewLocation={handleViewLocation}
+              onViewLocation={
+                deviceLocation && deviceLocation.position !== null && deviceLocation.position !== undefined
+                  ? () => handleViewLocation(device.id)
+                  : null // Asegúrate de pasar null explícitamente si no tiene ubicación
+              }
+              
+              hasPlan={hasPlan} // Indica si tiene plan
             />
-          ))
-        ) : (
-          <p>No tienes dispositivos propios registrados.</p>
-        )}
+          );
+        })}
+
+
+
+
        
       </div>
       {ownDevices.length > 0 && (
@@ -391,7 +452,7 @@ const Home = () => {
             onGenerateCode={() => handleGenerateCodigo(settingsDevice.id)} // Generar código
             onManageInvites={(userId) => handleRemoveInvite(settingsDevice.id, userId)} //  handleRemoveInvite
             onChangePlan={(newPlanId) => handleChangePlan(settingsDevice.id, newPlanId)} // Cambiar plan
-            onUnsubscribe={() => console.log('Darse de baja')} // Placeholder: Darse de baja
+            onUnsubscribe={() => handleUnsubscribeDevice(settingsDevice.id)} 
             planes={planes} // Lista de planes
             codigoInvitado={settingsDevice.codigoInvitado} // Código de invitado
             apodoActual={settingsDevice.apodo} // Apodo actual del dispositivo
@@ -404,24 +465,30 @@ const Home = () => {
           <>
             <h1 className={styles.homeTitle}>Dispositivos Invitados</h1>
             <div className={styles.homeCards}>
-              {invitedDevices.map((device) => (
-                <DispositivoCard
-                  key={device.id}
-                  deviceId={device.id}
-                  title={device.apodo || 'Sin apodo'}
-                  lastUpdate={
-                    device.ult_actualizacion
-                      ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
-                      : 'Sin actualizaciones'
-                  }
-                  updateRate={`${device.refresco} ${device.refresco === 1 ? 'minuto' : 'minutos'}`}
-                  battery={`${device.bateria?.toFixed(0) || 0}%`}
-                  imageSrc={device.imagen}
-                  isOwnDevice={false}
-                  onViewLocation={handleViewLocation} // Pasar función aquí
-              
+            {invitedDevices.length > 0 ? (
+              invitedDevices.map((device) => {
+                const deviceLocation = locations.find((loc) => loc.id === device.id);
+                return (
+                  <DispositivoCard
+                    key={device.id}
+                    deviceId={device.id}
+                    title={device.apodo || 'Sin apodo'}
+                    lastUpdate={
+                      device.ult_actualizacion
+                        ? new Date(device.ult_actualizacion._seconds * 1000).toLocaleString()
+                        : 'Sin actualizaciones'
+                    }
+                    updateRate={`${device.refresco} ${device.refresco === 1 ? 'minuto' : 'minutos'}`}
+                    battery={`${device.bateria?.toFixed(0) || 0}%`}
+                    imageSrc={device.imagen}
+                    isOwnDevice={false}
+                    onViewLocation={deviceLocation?.position ? () => handleViewLocation(device.id) : null} // Solo pasa la función si hay ubicación
                   />
-              ))}
+                );
+              })
+            ) : (
+              <p>No tienes dispositivos invitados registrados.</p>
+            )}
             </div>
           </>
         )}

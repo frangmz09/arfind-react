@@ -1,3 +1,6 @@
+a{
+  text-decoration: none;
+}
 .notification-panel {
   position: fixed;
   top: 0;

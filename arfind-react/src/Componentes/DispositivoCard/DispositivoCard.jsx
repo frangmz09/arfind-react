@@ -6,9 +6,6 @@ import addIcon from '/images/plus.png';
 
 const DispositivoCard = ({
   title,
-  lastUpdate,
-  updateRate,
-  battery,
   imageSrc,
   isOwnDevice,
   onEditName,
@@ -16,6 +13,10 @@ const DispositivoCard = ({
   onOpenGenerateCodeModal,
   onViewLocation, // Función para manejar "Ver ubicación"
   deviceId,
+  lastUpdate,
+  updateRate,
+  battery,
+  hasPlan, // Nueva prop para indicar si el dispositivo tiene un plan asociado
 }) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState(title);
@@ -29,10 +30,12 @@ const DispositivoCard = ({
 
   return (
     <div className={`${styles.card} ${isOwnDevice ? '' : styles.invitedCard}`}>
+      
       <div className={styles.cardHeader}>
         <div className={styles.cardTitleContainer}>
-          {isEditingName ? (
-            <>
+        {isEditingName ? (
+          <>
+            <div className={styles.editInputContainer}>
               <input
                 type="text"
                 className={styles.editInput}
@@ -40,7 +43,10 @@ const DispositivoCard = ({
                 onChange={(e) => setNewName(e.target.value)}
                 autoFocus
               />
-              <button className={styles.saveEditButton} onClick={handleSaveEdit}>
+              <button
+                className={styles.saveEditButton}
+                onClick={handleSaveEdit}
+              >
                 Guardar
               </button>
               <button
@@ -49,23 +55,25 @@ const DispositivoCard = ({
               >
                 Cancelar
               </button>
-            </>
-          ) : (
-            <>
-              <h2 className={styles.cardTitle}>{title}</h2>
-              {isOwnDevice && (
-                <img
-                  src={editIcon}
-                  alt="Editar nombre"
-                  className={styles.editIcon}
-                  onClick={() => setIsEditingName(true)}
-                  title="Editar Apodo"
-                />
-              )}
-            </>
-          )}
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className={styles.cardTitle}>{title}</h2>
+            {isOwnDevice && (
+              <img
+                src={editIcon}
+                alt="Editar nombre"
+                className={styles.editIcon}
+                onClick={() => setIsEditingName(true)}
+                title="Editar Apodo"
+              />
+            )}
+          </>
+        )}
+
         </div>
-        {isOwnDevice && (
+        {isOwnDevice && hasPlan && (
           <>
             <img
               src={addIcon}
@@ -86,17 +94,37 @@ const DispositivoCard = ({
       </div>
       <div className={styles.cardContent}>
         <img src={imageSrc} alt="Imagen de la tarjeta" className={styles.cardImage} />
-        <div className={styles.cardText}>
-          <p>Última actualización: {lastUpdate}</p>
-          <p>Tasa de actualización: {updateRate}</p>
-          <p>Batería: {battery}</p>
-        </div>
-        <button
-          className={styles.viewLocationButton} // Clase para estilo del botón
-          onClick={() => onViewLocation(deviceId)} // Llama a la función pasada desde `Home`
-        >
-          Ver ubicación
-        </button>
+        {hasPlan ? (
+          <div className={styles.cardText}>
+            <p>Última actualización: {lastUpdate}</p>
+            <p>Tasa de actualización: {updateRate}</p>
+            <p>Batería: {battery}</p>
+            
+            {typeof onViewLocation === 'function' ? (
+            <button
+              className={styles.viewLocationButton}
+              onClick={() => onViewLocation(deviceId)}
+            >
+              Ver ubicación
+            </button>
+          ) : (
+            <p className={styles.noLocationMessage}>Sin ubicación disponible</p>
+          )}
+
+
+
+          </div>
+        ) : (
+          <div className={styles.noPlanContainer}>
+            <p className={styles.noPlanMessage}>Este dispositivo no tiene un plan asociado.</p>
+            <button
+              className={styles.selectPlanButton}
+              onClick={() => onOpenSettingsModal(deviceId, 'changePlan')} // Abrir modal en la pestaña de cambio de plan
+            >
+              Seleccionar Plan
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
