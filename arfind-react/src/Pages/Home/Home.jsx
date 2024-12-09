@@ -53,9 +53,6 @@ const Home = () => {
       const token = localStorage.getItem('userToken'); // Obtén el token de autenticación
       await darseDeBaja(deviceId, token); // Llama al servicio con el ID del dispositivo
       
-      // Elimina el dispositivo del estado de dispositivos propios
-      setOwnDevices((prevDevices) => prevDevices.filter((device) => device.id !== deviceId));
-  
       setToastMessage('¡Te has dado de baja del dispositivo con éxito!');
       setShowToast(true);
   
@@ -99,13 +96,9 @@ const Home = () => {
       await cambiarPlan(deviceId, newPlanId, token); // Llama al servicio con los parámetros
   
       // Actualiza el dispositivo con el nuevo plan (opcional si el backend lo maneja)
-      setOwnDevices((prevDevices) =>
-        prevDevices.map((device) =>
-          device.id === deviceId
-            ? { ...device, plan: newPlanId }
-            : device
-        )
-      );
+      const updatedDevices = await getDispositivosByUsuario(token);
+      setOwnDevices(updatedDevices);
+      
   
       setToastMessage('¡Plan cambiado exitosamente!');
       setShowToast(true);

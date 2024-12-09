@@ -21,8 +21,12 @@ const mapTipoProducto = (tipoProductoId) => {
 };
 
 const Mapa = ({ locations }) => {
+  const validLocations = locations.filter(
+    (location) => location.position && location.position.lat && location.position.lng
+  );
+
   const defaultCenter =
-    locations.length > 0
+    validLocations.length > 0
       ? { lat: locations[0].position.lat, lng: locations[0].position.lng }
       : { lat: -34.6037, lng: -58.3816 };
 

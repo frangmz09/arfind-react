@@ -92,6 +92,7 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
             imgSrc="/images/notification.png"
             altText="Notificaciones"
             onClick={handleNotificationClick}
+            onLogout={onLogout || (() => {})}
           />
           <NavBarButton
             imgSrc="/images/account.png"
