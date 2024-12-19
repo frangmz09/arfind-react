@@ -5,6 +5,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: 'Consulta General', // Valor por defecto
     message: '',
   });
 
@@ -19,18 +20,27 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { name, email, message } = formData;
-    const recipientEmail = 'soporte@arfind.com'; // Cambia esto por tu dirección de correo
-    const subject = `Consulta de ${name}`;
-    const body = `Nombre: ${name}%0D%0AEmail: ${email}%0D%0AMensaje:%0D%0A${message}`;
+    const { name, email, subject, message } = formData;
+    const recipientEmail = 'soporte@arfind.com'; // Dirección de correo de destino
+    const finalSubject = `${subject} - ${name}`;
+
+    // Construir el cuerpo con saltos de línea normales
+    const body = `
+    Nombre: ${name}
+    Email: ${email}
+    Asunto: ${subject}
+    Mensaje:
+    ${message}
+    `;
+    const encodedSubject = encodeURIComponent(finalSubject);
+    const encodedBody = encodeURIComponent(body);
 
     // Abre el cliente de correo
-    window.location.href = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${recipientEmail}?subject=${encodedSubject}&body=${encodedBody}`;
   };
 
   return (
     <div style={styles.container}>
-      {/* Título de la página */}
       <header style={styles.header}>
         <h1 style={styles.title}>Contáctanos</h1>
         <p style={styles.subtitle}>
@@ -38,23 +48,6 @@ const Contact = () => {
         </p>
       </header>
 
-      {/* Información de contacto */}
-      <section style={styles.contactInfo}>
-        <div style={styles.infoItem}>
-          <h3 style={styles.infoTitle}>Dirección</h3>
-          <p style={styles.infoText}>Corrientes 3070 <br />CABA, Argentina</p>
-        </div>
-        <div style={styles.infoItem}>
-          <h3 style={styles.infoTitle}>Teléfono</h3>
-          <p style={styles.infoText}>0800-123-ARFIND</p>
-        </div>
-        <div style={styles.infoItem}>
-          <h3 style={styles.infoTitle}>Correo Electrónico</h3>
-          <p style={styles.infoText}>soporte@arfind.com</p>
-        </div>
-      </section>
-
-      {/* Formulario de contacto */}
       <section style={styles.formSection}>
         <h2 style={styles.title}>Formulario de Contacto</h2>
         <form onSubmit={handleSubmit} style={styles.form}>
@@ -70,6 +63,7 @@ const Contact = () => {
               required
             />
           </div>
+
           <div style={styles.formGroup}>
             <label style={styles.label} htmlFor="email">Correo Electrónico</label>
             <input
@@ -82,6 +76,25 @@ const Contact = () => {
               required
             />
           </div>
+
+          {/* Nuevo campo de Asunto */}
+          <div style={styles.formGroup}>
+            <label style={styles.label} htmlFor="subject">Asunto</label>
+            <select
+              style={styles.input}
+              id="subject"
+              name="subject"
+              value={formData.subject}
+              onChange={handleChange}
+              required
+            >
+              <option value="Consulta General">Consulta General</option>
+              <option value="Problema Técnico">Problema Técnico</option>
+              <option value="Solicitud de Información">Solicitud de Información</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
           <div style={styles.formGroup}>
             <label style={styles.label} htmlFor="message">Mensaje</label>
             <textarea
@@ -94,6 +107,7 @@ const Contact = () => {
               required
             ></textarea>
           </div>
+
           <button type="submit" style={styles.button}>Enviar Mensaje</button>
         </form>
       </section>
@@ -124,27 +138,6 @@ const styles = {
     color: '#5C5C5C',
     maxWidth: '600px',
     margin: '10px auto',
-  },
-  contactInfo: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    marginBottom: '40px',
-    textAlign: 'center',
-  },
-  infoItem: {
-    flex: '1',
-    margin: '0 10px',
-  },
-  infoTitle: {
-    fontSize: '1.2em',
-    fontWeight: '600',
-    color: '#0D8BFF',
-    marginBottom: '5px',
-  },
-  infoText: {
-    fontSize: '1em',
-    color: '#5C5C5C',
-    fontWeight: 'bolder',
   },
   formSection: {
     marginTop: '20px',

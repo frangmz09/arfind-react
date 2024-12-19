@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
-import ProductCard from '../../Pages/PasarelaProductos/ProductCard/ProductCard'; // Asegúrate de que la ruta sea correcta
+import React, { useState, useEffect } from 'react';
+import ProductCard from '../../Pages/PasarelaProductos/ProductCard/ProductCard';
 import './PasarelaProductos.css';
 
 const PasarelaProductos = ({ products, height }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const cardWidth = 25; // Ajusta esto según el ancho de tus tarjetas en porcentaje
-  const spacing = 10; // Espacio en porcentaje entre tarjetas
+  const [showArrows, setShowArrows] = useState(false);
+
+  const cardWidth = 25; // Ancho de cada tarjeta (%)
+  const spacing = 10; // Espacio entre tarjetas (%)
+  const cardsVisible = 3; // Máximo número de tarjetas visibles
   const moveAmount = cardWidth + spacing;
+
+  useEffect(() => {
+    setShowArrows(products.length > cardsVisible);
+  }, [products]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
 
   const handleNext = () => {
-    const maxIndex = Math.ceil(products.length * (cardWidth + spacing) / 100) - 1;
+    const maxIndex = Math.max(0, products.length - cardsVisible);
     setCurrentIndex((prevIndex) => Math.min(prevIndex + 1, maxIndex));
   };
-
-  const showArrows = products.length > 4; // Mostrar flechas solo si hay más de 4 tarjetas
 
   return (
     <div className="pasarela-container" style={{ height }}>
@@ -29,15 +34,19 @@ const PasarelaProductos = ({ products, height }) => {
       <div className="pasarela-products">
         <div
           className="products-wrapper"
-          style={{ transform: `translateX(-${currentIndex * moveAmount}%)` }}
+          style={{
+            transform: `translateX(-${currentIndex * moveAmount}%)`,
+            width: `${products.length * (cardWidth + spacing)}%`,
+          }}
         >
           {products.map((producto, index) => (
             <ProductCard
-              key={producto.id || index} // Usa el ID del producto como clave, si existe
-              id={producto.id} // Pasa el ID del producto a ProductCard
+              key={producto.id || index}
+              id={producto.id}
               title={producto.titulo}
               description={producto.tiny_descripcion}
               imageSrc={producto.imagen}
+              hasStock={producto.has_stock}
             />
           ))}
         </div>

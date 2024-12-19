@@ -12,6 +12,8 @@ import iconPersonas from '/images/icon_personas.png';
 import iconMascotas from '/images/icon_mascotas.png';
 import iconAutos from '/images/icon_autos.png';
 import './LandingPage.css'; // Archivo CSS para estilos
+import { Link } from 'react-router-dom';
+
 
 
 const testimonios = [
@@ -176,15 +178,15 @@ const Landing = () => {
             <h3 style={styles.planTitle}>Plan Básico</h3>
             <p style={styles.planPrice}>$5.99</p>
             <p style={styles.planDescription}>Rastreo sencillo con actualización <b>cada 30 minutos</b>, ideal para quienes buscan protección accesible. Comparte la ubicación <b>con una persona</b>.</p>
-              <a  style={styles.planButton} href="/login">Ver más</a>
-          </div>
+            <Link style={styles.planButton} to="/login">Ver más</Link>
+            </div>
 
           {/* Plan Premium */}
           <div style={styles.planPremium}>
             <h3 style={styles.planTitlePremium}>Plan Premium</h3>
             <p style={styles.planPricePremium}>$15.99</p>
             <p style={styles.planDescriptionPremium}>Rastreo en tiempo real con actualizaciones <b>cada minuto</b>. Seguridad avanzada para tus seres queridos y vehículos, con opción de compartir <b>con hasta cinco personas</b>.</p>
-            <a  style={styles.planButtonPremium} href="/login">Ver más</a>
+            <Link style={styles.planButtonPremium} to="/login">Ver más</Link>
 
           </div>
         </div>
@@ -194,7 +196,7 @@ const Landing = () => {
         <p>Protegé lo que más valorás con ARfind. ¿Listo para empezar?</p>
       </footer>
       <div className="start-button-container">
-        <a href="/" className="start-button">Acceder al sistema</a>
+      <Link className='start-button' to="/login">Acceder al sistema</Link>
       </div>
       {/* Testimonios Section */}
       <section style={styles.testimonios}>

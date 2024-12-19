@@ -7,16 +7,21 @@
     max-width: 1000px; 
     margin: 0 auto; 
 }
-
 .pasarela-products {
     width: 100%;
-    overflow: hidden;
+    overflow-x: scroll; /* Habilita scroll horizontal */
+    overflow-y: hidden; /* Evita scroll vertical */
+    scrollbar-width: none; /* Oculta el scrollbar en navegadores compatibles */
+}
+
+.pasarela-products::-webkit-scrollbar {
+    display: none; /* Oculta scrollbar en navegadores WebKit */
 }
 
 .products-wrapper {
     display: flex;
-    transition: transform 0.5s ease;
-    padding: 15px; 
+    transition: transform 0.5s ease-in-out;
+    padding: 15px;
 }
 
 .arrow-btn {
@@ -27,11 +32,13 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
+    padding: 10px;
+    border-radius: 50%;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .arrow-btn img {
-    width: 30px; 
+    width: 30px;
     height: auto;
 }
 
@@ -40,13 +47,23 @@
 }
 
 .left {
-    left: 0px;
+    left: -15px;
 }
 
 .right {
-    right: 0px;
+    right: -15px;
 }
 
 .product-card {
-    margin: 0 10px; /* Añade espacio entre las tarjetas */
+    margin: 0 10px;
+    flex: 0 0 calc(25% - 10px); /* Tamaño dinámico con espacio entre tarjetas */
+    box-sizing: border-box;
+}
+.product-card img {
+    width: 33%; /* Asegura que la imagen ocupe todo el ancho */
+    height: auto; /* Mantén la proporción de la imagen */
+    object-fit: contain; /* Ajusta la imagen dentro de su contenedor sin recortarla */
+    max-height: 150px; /* Define una altura máxima si es necesario */
+    margin: 0 auto; /* Centra la imagen horizontalmente */
+    display: block; /* Asegura que se renderice correctamente */
 }

@@ -305,7 +305,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    document.title = 'ARfind - Panel de Control';
     const token = localStorage.getItem('userToken');
     if (!token) {
       setError('No se ha encontrado el token de autenticación.');
@@ -349,32 +348,21 @@ const Home = () => {
         {error && <p className={styles.errorMessage}>{error}</p>}
 
         <h1 className={styles.homeTitle}>Tus Dispositivos Propios</h1>
-        <div className={styles.homeCards}>
-        {ownDevices
-        .slice() // Crea una copia para no modificar el estado original
-        .sort((a, b) => {
-          // Si `plan_id` está presente, lo consideramos primero
-          if (a.plan_id && !b.plan_id) return -1;
-          if (!a.plan_id && b.plan_id) return 1;
-          return 0; // Mantén el orden relativo si ambos tienen o no tienen `plan_id`
-        })
-        .map((device) => {
-          const deviceLocation = locations.find((loc) => loc.id === device.id);
-          const hasPlan = !!device.plan_id; // Verifica si tiene un plan asociado
-          const onViewLocation =
-            deviceLocation && deviceLocation.position
-              ? () => handleViewLocation(device.id)
-              : undefined;
+<div className={styles.homeCards}>
+  {ownDevices.length > 0 ? (
+    ownDevices
+      .slice()
+      .sort((a, b) => {
+        if (a.plan_id && !b.plan_id) return -1;
+        if (!a.plan_id && b.plan_id) return 1;
+        return 0;
+      })
+      .map((device) => {
+        const deviceLocation = locations.find((loc) => loc.id === device.id);
+        const hasPlan = !!device.plan_id;
 
-          console.log({
-            device: device.apodo,
-            location: deviceLocation,
-            hasPlan,
-            onViewLocation,
-          }); // Depuración
-
-          return (
-            <DispositivoCard
+        return (
+          <DispositivoCard
               key={device.id}
               title={device.apodo || 'Sin apodo'}
               lastUpdate={
@@ -399,14 +387,15 @@ const Home = () => {
               
               hasPlan={hasPlan} // Indica si tiene plan
             />
-          );
-        })}
+        );
+      })
+  ) : (
+    <p className={styles.noDevicesMessage}>
+      No tienes dispositivos propios registrados. 
+    </p>
+  )}
+</div>
 
-
-
-
-       
-      </div>
       {ownDevices.length > 0 && (
         <div className={styles.extraButtons}>
           <button onClick={handleViewAllLocations} className={styles.panelBtn}>
@@ -461,6 +450,10 @@ const Home = () => {
             {invitedDevices.length > 0 ? (
               invitedDevices.map((device) => {
                 const deviceLocation = locations.find((loc) => loc.id === device.id);
+                const onViewLocation =
+                  deviceLocation && deviceLocation.position
+                    ? () => handleViewLocation(device.id)
+                    : undefined;
                 return (
                   <DispositivoCard
                     key={device.id}
@@ -475,7 +468,13 @@ const Home = () => {
                     battery={`${device.bateria?.toFixed(0) || 0}%`}
                     imageSrc={device.imagen}
                     isOwnDevice={false}
-                    onViewLocation={deviceLocation?.position ? () => handleViewLocation(device.id) : null} // Solo pasa la función si hay ubicación
+                    onViewLocation={
+                      deviceLocation && deviceLocation.position !== null && deviceLocation.position !== undefined
+                        ? () => handleViewLocation(device.id)
+                        : null 
+                    }
+                    hasPlan={true}
+                    
                   />
                 );
               })

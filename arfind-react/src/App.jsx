@@ -13,6 +13,7 @@ import DetalleProducto from './Pages/PasarelaProductos/DetalleProducto/DetallePr
 import AboutUs from './Pages/AboutUs/AboutUs';
 import Contact from './Pages/Contact/Contact';
 import PagoStatus from './Pages/PasarelaProductos/PagoStatus/PagoStatus';
+import RouteTitleManager from './Componentes/RouteTitleManager/RouteTitleManager';
 
 import './styles/App.css';
 
@@ -20,6 +21,7 @@ const App = () => {
   return (
     <AuthProvider>
       <Router>
+      <RouteTitleManager />
         <AuthRoutes />
       </Router>
     </AuthProvider>
